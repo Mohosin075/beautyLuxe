@@ -8,6 +8,9 @@ import MyProducts from "../pages/dashboard/myProducts/MyProducts";
 import App from "./../App";
 import Contact from "../pages/contact/Contact";
 import Products from "../pages/products/Products";
+import SignIn from "../pages/signIn/SignIn";
+import SignUp from "../pages/signUp/SignUp";
+import NotFound from "../pages/notFound/NotFound";
 
 function AppRoutes() {
   return (
@@ -19,6 +22,8 @@ function AppRoutes() {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="products" element={<Products />} />
+          <Route path="sign-in" element={<SignIn />} />
+          <Route path="sign-up" element={<SignUp />} />
         </Route>
 
         {/* Dashboard Layout here */}
@@ -27,6 +32,7 @@ function AppRoutes() {
           <Route path="add-product" element={<AddProduct />}></Route>
           <Route path="my-product" element={<MyProducts />}></Route>
         </Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
   );

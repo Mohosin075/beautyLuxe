@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.my-btn {
+  @apply border px-3 py-2  rounded-md border-primary-dark hover:bg-primary-dark hover:text-white transition-all duration-100 font-semibold flex items-center justify-center gap-1;
+}
