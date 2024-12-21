@@ -7,6 +7,7 @@ import Overview from "../pages/dashboard/overview/Overview";
 import MyProducts from "../pages/dashboard/myProducts/MyProducts";
 import App from "./../App";
 import Contact from "../pages/contact/Contact";
+import Products from "../pages/products/Products";
 
 function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="products" element={<Products />} />
         </Route>
 
         {/* Dashboard Layout here */}
