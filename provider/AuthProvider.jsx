@@ -37,6 +37,7 @@ function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       console.log(currentUser);
+      setLoading(false)
 
       // if (currentUser && currentUser?.email) {
       //   axios
