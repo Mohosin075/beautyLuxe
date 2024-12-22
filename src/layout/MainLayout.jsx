@@ -61,7 +61,7 @@ function MainLayout() {
     });
   };
 
-  if (loading || dataLoading) {
+  if (loading) {
     return <Loading />;
   }
 

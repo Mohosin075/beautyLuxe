@@ -33,7 +33,6 @@ function SocialLogin() {
               userData,
             })
             .then((res) => {
-              console.log(res);
               if (
                 res.data.insertedId ||
                 res.data.message === "This user Already exist!"

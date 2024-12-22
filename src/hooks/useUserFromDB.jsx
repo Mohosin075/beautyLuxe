@@ -8,20 +8,23 @@ function useUserFromDB() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("beautyLuxe");
     const fetchUser = async () => {
       setLoading(true);
-      const token = localStorage.getItem("beautyLuxe");
+      console.log({ user, token });
       axios
         .get(`http://localhost:3000/user/${user.email}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setUserFromDb(res.data);
-          setLoading(false);
+          if (res.data) {
+            setLoading(false);
+            setUserFromDb(res.data);
+          }
         });
     };
 
-    if (user) {
+    if (user && token) {
       fetchUser();
     }
   }, [user]);
