@@ -22,6 +22,7 @@ function SignUp() {
   } = useForm();
 
   const handleSignUp = (data) => {
+    console.log(data);
     createUser(data.email, data.password)
       .then(async (result) => {
         if (result.user) {
@@ -29,7 +30,8 @@ function SignUp() {
             name: data.fullName,
             email: data.email,
             photoURL: "",
-            role: "buyer",
+            role: data.role ? data.role : "buyer",
+            status: data.role === "buyer" ? "approved" : "pending",
             wishlist: [],
           };
 
@@ -118,6 +120,17 @@ function SignUp() {
                         email is required
                       </span>
                     )}
+                  </div>
+                  <div>
+                    <label>Role : </label>
+                    <select
+                      {...register("role")}
+                      defaultValue="buyer"
+                      className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    >
+                      <option>buyer</option>
+                      <option>seller</option>
+                    </select>
                   </div>
                   <div>
                     <label>Password : </label>
