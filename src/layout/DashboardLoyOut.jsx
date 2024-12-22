@@ -1,40 +1,15 @@
 import { FaBarsStaggered } from "react-icons/fa6";
 import { IoHome } from "react-icons/io5";
-import { MdContactPhone } from "react-icons/md";
-import { FaAccusoft } from "react-icons/fa";
 import { AiOutlineProduct } from "react-icons/ai";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
-import Overview from "../pages/dashboard/overview/Overview";
+import useUserFromDB from "../hooks/useUserFromDB";
 
 function DashboardLoyOut() {
-  // const NavLinkList = [
-  //   {
-  //     label: "About",
-  //     to: "about",
-  //     icon: <FaAccusoft />,
-  //   },
-  //   {
-  //     label: "Contact",
-  //     to: "contact",
-  //     icon: <MdContactPhone />,
-  //   },
-  //   {
-  //     label: "Product",
-  //     to: "products",
-  //     icon: <AiOutlineProduct />,
-  //   },
-  // ];
-
   const adminRoutes = [
-    {
-      label: "Add-Product",
-      to: "add-product",
-      icon: <AiOutlineProduct />,
-    },
     {
       label: "All User",
       to: "users",
@@ -44,21 +19,20 @@ function DashboardLoyOut() {
 
   const sellerRoutes = [
     {
-      label: "Product",
-      to: "products",
+      label: "My Product",
+      to: "my-product",
       icon: <AiOutlineProduct />,
     },
-  ];
-
-  const buyerRoutes = [
     {
-      label: "Product",
-      to: "products",
+      label: "Add-Product",
+      to: "add-product",
       icon: <AiOutlineProduct />,
     },
   ];
 
   const { user, logOut } = useAuth();
+
+  const { userFromDb } = useUserFromDB();
 
   const handleLogOut = () => {
     logOut().then((result) => {
@@ -166,14 +140,24 @@ function DashboardLoyOut() {
             </>
           )}
 
-          {adminRoutes.map((list, i) => (
-            <li key={i} className="mb-1">
-              <NavLink to={`/dashboard/${list.to}`}>
-                <span>{list.icon}</span>
-                {list.label}
-              </NavLink>
-            </li>
-          ))}
+          {userFromDb.role === "admin" &&
+            adminRoutes.map((list, i) => (
+              <li key={i} className="mb-1">
+                <NavLink to={`/dashboard/${list.to}`}>
+                  <span>{list.icon}</span>
+                  {list.label}
+                </NavLink>
+              </li>
+            ))}
+          {userFromDb.role === "seller" &&
+            sellerRoutes.map((list, i) => (
+              <li key={i} className="mb-1">
+                <NavLink to={`/dashboard/${list.to}`}>
+                  <span>{list.icon}</span>
+                  {list.label}
+                </NavLink>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
