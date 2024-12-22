@@ -11,11 +11,14 @@ import SignIn from "../pages/signIn/SignIn";
 import SignUp from "../pages/signUp/SignUp";
 import NotFound from "../pages/notFound/NotFound";
 import User from "../pages/dashboard/admin/users/User";
-import PrivateRoutes from "./PrivateRoutes";
 import WishList from "../pages/dashboard/wishlist/WishList";
 import MyCart from "../pages/dashboard/myCart/MyCart";
 import DashboardLoyOut from "../layout/DashboardLoyOut";
 import UpdateUser from "../pages/dashboard/updateUser/UpdateUser";
+import SellerRoutes from "./SellerRoutes";
+import AdminRoutes from "./AdminRoutes";
+import BuyerRoutes from "./BuyerRoutes";
+import PrivateRoutes from "./PrivateRoutes";
 
 function AppRoutes() {
   return (
@@ -33,17 +36,17 @@ function AppRoutes() {
           <Route
             path="wishlist"
             element={
-              <PrivateRoutes>
+              <BuyerRoutes>
                 <WishList />
-              </PrivateRoutes>
+              </BuyerRoutes>
             }
           ></Route>
           <Route
             path="my-cart"
             element={
-              <PrivateRoutes>
+              <BuyerRoutes>
                 <MyCart />
-              </PrivateRoutes>
+              </BuyerRoutes>
             }
           ></Route>
         </Route>
@@ -59,11 +62,39 @@ function AppRoutes() {
         >
           <Route index element={<Overview />}></Route>
           {/* for admin */}
-          <Route path="users" element={<User />}></Route>
-          <Route path="update-user/:email" element={<UpdateUser />}></Route>
+          <Route
+            path="users"
+            element={
+              <AdminRoutes>
+                <User />
+              </AdminRoutes>
+            }
+          ></Route>
+          <Route
+            path="update-user/:email"
+            element={
+              <AdminRoutes>
+                <UpdateUser />
+              </AdminRoutes>
+            }
+          ></Route>
           {/* for seller */}
-          <Route path="add-product" element={<AddProduct />}></Route>
-          <Route path="my-product" element={<MyProducts />}></Route>
+          <Route
+            path="add-product"
+            element={
+              <SellerRoutes>
+                <AddProduct />
+              </SellerRoutes>
+            }
+          ></Route>
+          <Route
+            path="my-product"
+            element={
+              <SellerRoutes>
+                <MyProducts />
+              </SellerRoutes>
+            }
+          ></Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

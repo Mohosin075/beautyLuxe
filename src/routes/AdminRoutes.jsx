@@ -1,11 +1,16 @@
 import { Navigate, useLocation } from "react-router";
 import useAuth from "../hooks/useAuth";
+import useUserFromDB from "../hooks/useUserFromDB";
 
-function PrivateRoutes({ children }) {
+function AdminRoutes({ children }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  const { userFromDb } = useUserFromDB();
+
+  console.log(userFromDb.role);
+
+  if (loading || !userFromDb.role) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -13,10 +18,11 @@ function PrivateRoutes({ children }) {
     );
   }
 
-  if (user) {
+  if (user && userFromDb.role === "admin") {
     return children;
   }
+
   return <Navigate to={"/sign-in"} state={{ from: location }} replace />;
 }
 
-export default PrivateRoutes;
+export default AdminRoutes;
