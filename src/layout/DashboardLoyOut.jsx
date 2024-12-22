@@ -34,6 +34,7 @@ function DashboardLoyOut() {
 
   const { userFromDb } = useUserFromDB();
 
+
   const handleLogOut = () => {
     logOut().then((result) => {
       console.log(result);

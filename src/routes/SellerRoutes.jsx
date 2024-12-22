@@ -1,13 +1,16 @@
 import { Navigate, useLocation } from "react-router";
 import useAuth from "../hooks/useAuth";
+import useUserFromDB from "../hooks/useUserFromDB";
 
 function SellerRoutes({ children }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  
+  const { userFromDb } = useUserFromDB();
 
-  if (loading) {
+  console.log(userFromDb.role);
+
+  if (loading || !userFromDb.role) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -15,11 +18,11 @@ function SellerRoutes({ children }) {
     );
   }
 
-  if (user && user?.role === "seller") {
+  if (user && userFromDb.role === "seller") {
     return children;
   }
 
-  return <Navigate to={"/login"} state={{ from: location }} replace />;
+  return <Navigate to={"/sign-in"} state={{ from: location }} replace />;
 }
 
 export default SellerRoutes;

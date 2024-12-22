@@ -11,7 +11,6 @@ function useUserFromDB() {
     const token = localStorage.getItem("beautyLuxe");
     const fetchUser = async () => {
       setLoading(true);
-      console.log({ user, token });
       axios
         .get(`http://localhost:3000/user/${user.email}`, {
           headers: { Authorization: `Bearer ${token}` },
