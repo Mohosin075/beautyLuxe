@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import About from "../pages/about/About";
 import Home from "../pages/home/Home";
-import DashboardLoyOut from "../layout/DashboardLoyout";
 import AddProduct from "../pages/dashboard/addProduct/AddProduct";
 import Overview from "../pages/dashboard/overview/Overview";
 import MyProducts from "../pages/dashboard/myProducts/MyProducts";
@@ -13,6 +12,9 @@ import SignUp from "../pages/signUp/SignUp";
 import NotFound from "../pages/notFound/NotFound";
 import User from "../pages/dashboard/admin/users/User";
 import PrivateRoutes from "./PrivateRoutes";
+import WishList from "../pages/dashboard/wishlist/WishList";
+import MyCart from "../pages/dashboard/myCart/MyCart";
+import DashboardLoyOut from "../layout/DashboardLoyOut";
 
 function AppRoutes() {
   return (
@@ -26,6 +28,23 @@ function AppRoutes() {
           <Route path="products" element={<Products />} />
           <Route path="sign-in" element={<SignIn />} />
           <Route path="sign-up" element={<SignUp />} />
+          {/* for buyer */}
+          <Route
+            path="wishlist"
+            element={
+              <PrivateRoutes>
+                <WishList />
+              </PrivateRoutes>
+            }
+          ></Route>
+          <Route
+            path="my-cart"
+            element={
+              <PrivateRoutes>
+                <MyCart />
+              </PrivateRoutes>
+            }
+          ></Route>
         </Route>
 
         {/* Dashboard Layout here */}

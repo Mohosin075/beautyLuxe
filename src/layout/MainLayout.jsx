@@ -8,8 +8,15 @@ import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
+import useUserFromDB from "../hooks/useUserFromDB";
+import Loading from "../pages/loading/Loading";
 
 function MainLayout() {
+  const { loading } = useAuth();
+  const { userFromDb, loading: dataLoading } = useUserFromDB();
+
+  console.log(userFromDb);
+
   const NavLinkList = [
     {
       label: "Home",
@@ -33,6 +40,19 @@ function MainLayout() {
     },
   ];
 
+  const buyerRoutes = [
+    {
+      label: "Wishlist",
+      to: "wishlist",
+      icon: <AiOutlineProduct />,
+    },
+    {
+      label: "My Cart",
+      to: "my-cart",
+      icon: <AiOutlineProduct />,
+    },
+  ];
+
   const { user, logOut } = useAuth();
 
   const handleLogOut = () => {
@@ -40,6 +60,10 @@ function MainLayout() {
       console.log(result);
     });
   };
+
+  if (loading || dataLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="drawer lg:drawer-open">
@@ -116,7 +140,9 @@ function MainLayout() {
           </div>
           {/* Sidebar content here */}
 
-          {user && (
+          {/* for admin and seller */}
+
+          {userFromDb?.role === "admin" || userFromDb?.role === "seller" ? (
             <>
               <li>
                 <NavLink to="/dashboard">
@@ -128,8 +154,36 @@ function MainLayout() {
               </li>
               <div className="divider"></div>
             </>
+          ) : (
+            <>
+              {buyerRoutes.map((list, i) => (
+                <li key={i} className="mb-1">
+                  <NavLink to={list.to}>
+                    <span>{list.icon}</span>
+                    {list.label}
+                  </NavLink>
+                </li>
+              ))}
+              <div className="divider"></div>
+            </>
           )}
 
+          {/* buyer routes */}
+          {/* {userFromDb?.role === "buyer" && (
+            <>
+              {buyerRoutes.map((list, i) => (
+                <li key={i} className="mb-1">
+                  <NavLink to={list.to}>
+                    <span>{list.icon}</span>
+                    {list.label}
+                  </NavLink>
+                </li>
+              ))}
+              <div className="divider"></div>
+            </>
+          )} */}
+
+          {/* for common route */}
           {NavLinkList.map((list, i) => (
             <li key={i} className="mb-1">
               <NavLink to={list.to}>
