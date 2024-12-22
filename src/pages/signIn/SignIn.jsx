@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
 import { NavLink } from "react-router";
+import { toast } from "sonner";
+import useAuth from "../../hooks/useAuth";
 
 function SignIn() {
+  const { loginUser } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -10,7 +14,16 @@ function SignIn() {
   } = useForm();
 
   const handleSignUp = (data) => {
-    console.log(data);
+    loginUser(data.email, data.password)
+      .then((result) => {
+        if (result.user) {
+          toast.success("User Login Successfully!");
+        }
+        console.log(result.user);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
   return (
     <div>
@@ -47,7 +60,15 @@ function SignIn() {
                     </span>
                   </button>
                 </div>
-                <p className="mt-5 text-center">new to this site! please <NavLink to='/sign-up' className='text-secondary-dark underline font-semibold'>sign up</NavLink></p>
+                <p className="mt-5 text-center">
+                  new to this site! please{" "}
+                  <NavLink
+                    to="/sign-up"
+                    className="text-secondary-dark underline font-semibold"
+                  >
+                    sign up
+                  </NavLink>
+                </p>
               </div>
             </div>
 
