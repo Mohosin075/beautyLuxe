@@ -12,6 +12,7 @@ import SignIn from "../pages/signIn/SignIn";
 import SignUp from "../pages/signUp/SignUp";
 import NotFound from "../pages/notFound/NotFound";
 import User from "../pages/dashboard/admin/users/User";
+import PrivateRoutes from "./PrivateRoutes";
 
 function AppRoutes() {
   return (
@@ -28,8 +29,15 @@ function AppRoutes() {
         </Route>
 
         {/* Dashboard Layout here */}
-        <Route path="dashboard" element={<DashboardLoyOut />}>
-        <Route index element={<Overview />}></Route>
+        <Route
+          path="dashboard"
+          element={
+            <PrivateRoutes>
+              <DashboardLoyOut />
+            </PrivateRoutes>
+          }
+        >
+          <Route index element={<Overview />}></Route>
           {/* for admin */}
           <Route path="users" element={<User />}></Route>
           {/* for seller */}
