@@ -15,6 +15,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import WishList from "../pages/dashboard/wishlist/WishList";
 import MyCart from "../pages/dashboard/myCart/MyCart";
 import DashboardLoyOut from "../layout/DashboardLoyOut";
+import UpdateUser from "../pages/dashboard/updateUser/UpdateUser";
 
 function AppRoutes() {
   return (
@@ -59,6 +60,7 @@ function AppRoutes() {
           <Route index element={<Overview />}></Route>
           {/* for admin */}
           <Route path="users" element={<User />}></Route>
+          <Route path="update-user/:email" element={<UpdateUser />}></Route>
           {/* for seller */}
           <Route path="add-product" element={<AddProduct />}></Route>
           <Route path="my-product" element={<MyProducts />}></Route>
