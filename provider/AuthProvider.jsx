@@ -17,12 +17,14 @@ const googleProvider = new GoogleAuthProvider();
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
   const loginUser = (email, password) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -31,13 +33,14 @@ function AuthProvider({ children }) {
   };
 
   const googleLogin = () => {
+    setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log(currentUser);
+      console.log({ currentUser });
       // setLoading(false)
 
       if (currentUser && currentUser?.email) {
@@ -56,6 +59,11 @@ function AuthProvider({ children }) {
         setLoading(false);
       }
     });
+
+    // const token = localStorage.getItem("beautyLuxe");
+    // if (!token) {
+    //   logOut();
+    // }
 
     return () => {
       return unsubscribe();
