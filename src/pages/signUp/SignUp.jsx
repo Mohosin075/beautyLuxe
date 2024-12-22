@@ -1,12 +1,19 @@
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
+import axios from "axios";
 
 function SignUp() {
   const { createUser } = useAuth();
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const path = location?.state?.from?.pathname || "/";
+
   const {
     register,
     handleSubmit,
@@ -16,9 +23,27 @@ function SignUp() {
 
   const handleSignUp = (data) => {
     createUser(data.email, data.password)
-      .then((result) => {
+      .then(async (result) => {
         if (result.user) {
-          toast.success("User created Successfully!");
+          const userData = {
+            name: data.fullName,
+            email: data.email,
+            photoURL: "",
+            role: "buyer",
+            wishlist: [],
+          };
+
+          await axios
+            .post(`http://localhost:3000/user/${result.user.email}`, {
+              userData,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data.insertedId) {
+                toast.success("User created Successfully!");
+                navigate(path);
+              }
+            });
         }
       })
       .catch((err) => {
