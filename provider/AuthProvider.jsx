@@ -9,6 +9,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { app } from "../src/firebase/firebase.config";
+import axios from "axios";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -37,23 +38,23 @@ function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       console.log(currentUser);
-      setLoading(false)
+      // setLoading(false)
 
-      // if (currentUser && currentUser?.email) {
-      //   axios
-      //     .post("http://localhost:3000/jwt", {
-      //       email: currentUser.email,
-      //     })
-      //     .then((data) => {
-      //       if (data?.data?.token) {
-      //         localStorage.setItem("gadget-shop", data?.data?.token);
-      //         setLoading(false);
-      //       }
-      //     });
-      // } else {
-      //   localStorage.removeItem("gadget-shop");
-      //   setLoading(false);
-      // }
+      if (currentUser && currentUser?.email) {
+        axios
+          .post("http://localhost:3000/jwt", {
+            email: currentUser.email,
+          })
+          .then((data) => {
+            if (data?.data?.token) {
+              localStorage.setItem("beautyLuxe", data?.data?.token);
+              setLoading(false);
+            }
+          });
+      } else {
+        localStorage.removeItem("beautyLuxe");
+        setLoading(false);
+      }
     });
 
     return () => {

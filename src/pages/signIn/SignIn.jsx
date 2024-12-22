@@ -1,12 +1,16 @@
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
 
 function SignIn() {
   const { loginUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const path = location?.state?.from?.pathname || '/'
 
   const {
     register,
@@ -14,11 +18,12 @@ function SignIn() {
     formState: { errors },
   } = useForm();
 
-  const handleSignUp = (data) => {
+  const handleSignIn = (data) => {
     loginUser(data.email, data.password)
       .then((result) => {
         if (result.user) {
           toast.success("User Login Successfully!");
+          navigate(path);
         }
         console.log(result.user);
       })
@@ -64,7 +69,7 @@ function SignIn() {
                 Continue with Email
               </h1>
               <div className="divider"></div>
-              <form onSubmit={handleSubmit(handleSignUp)}>
+              <form onSubmit={handleSubmit(handleSignIn)}>
                 <div className="space-y-2">
                   <div>
                     <label>Email : </label>
