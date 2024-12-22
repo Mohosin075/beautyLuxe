@@ -17,14 +17,14 @@ const googleProvider = new GoogleAuthProvider();
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
   const loginUser = (email, password) => {
-    setLoading(true);
+    // setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -33,7 +33,7 @@ function AuthProvider({ children }) {
   };
 
   const googleLogin = () => {
-    setLoading(true);
+    // setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
@@ -60,10 +60,6 @@ function AuthProvider({ children }) {
       }
     });
 
-    // const token = localStorage.getItem("beautyLuxe");
-    // if (!token) {
-    //   logOut();
-    // }
 
     return () => {
       return unsubscribe();

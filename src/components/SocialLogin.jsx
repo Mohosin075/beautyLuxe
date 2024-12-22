@@ -24,6 +24,7 @@ function SocialLogin() {
           email: user.email,
           photoURL: "",
           role: "buyer",
+          status: "approved",
           wishlist: [],
         };
 

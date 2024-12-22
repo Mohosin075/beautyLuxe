@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 function SectionTitle({ title, description }) {
   return (
     <div>
