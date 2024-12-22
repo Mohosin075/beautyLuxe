@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged,
+
 } from "firebase/auth";
 import { app } from "../src/firebase/firebase.config";
 import axios from "axios";
@@ -60,11 +61,10 @@ function AuthProvider({ children }) {
       }
     });
 
-
     return () => {
       return unsubscribe();
     };
-  }, []);
+  }, [user]);
 
   const authInfo = {
     user,
@@ -72,7 +72,7 @@ function AuthProvider({ children }) {
     createUser,
     logOut,
     loginUser,
-    googleLogin,
+    googleLogin
   };
 
   return (
