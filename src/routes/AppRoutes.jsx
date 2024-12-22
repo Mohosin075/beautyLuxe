@@ -11,6 +11,7 @@ import Products from "../pages/products/Products";
 import SignIn from "../pages/signIn/SignIn";
 import SignUp from "../pages/signUp/SignUp";
 import NotFound from "../pages/notFound/NotFound";
+import User from "../pages/dashboard/admin/users/User";
 
 function AppRoutes() {
   return (
@@ -28,7 +29,10 @@ function AppRoutes() {
 
         {/* Dashboard Layout here */}
         <Route path="dashboard" element={<DashboardLoyOut />}>
-          <Route index element={<Overview />} />
+        <Route index element={<Overview />}></Route>
+          {/* for admin */}
+          <Route path="users" element={<User />}></Route>
+          {/* for seller */}
           <Route path="add-product" element={<AddProduct />}></Route>
           <Route path="my-product" element={<MyProducts />}></Route>
         </Route>

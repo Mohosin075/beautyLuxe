@@ -3,6 +3,7 @@ import { MdKeyboardTab } from "react-icons/md";
 import { NavLink } from "react-router";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
+import SocialLogin from "../../components/SocialLogin";
 
 function SignIn() {
   const { loginUser } = useAuth();
@@ -40,26 +41,7 @@ function SignIn() {
                   Connect with Social Media
                 </h1>
                 <div className="divider"></div>
-                <div className="space-y-3">
-                  <button
-                    type="submit"
-                    className="my-btn w-full text-center border-secondary-dark bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
-                  >
-                    Continue with Google
-                    <span>
-                      <MdKeyboardTab />
-                    </span>
-                  </button>
-                  <button
-                    type="submit"
-                    className="my-btn w-full text-center bg-secondary-dark text-white hover:bg-purple-300 hover:text-purple-900"
-                  >
-                    Continue with Facebook
-                    <span>
-                      <MdKeyboardTab />
-                    </span>
-                  </button>
-                </div>
+                <SocialLogin />
                 <p className="mt-5 text-center">
                   new to this site! please{" "}
                   <NavLink
