@@ -6,6 +6,7 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
+import useAuth from "../hooks/useAuth";
 
 function MainLayout() {
   const NavLinkList = [
@@ -30,6 +31,8 @@ function MainLayout() {
       icon: <AiOutlineProduct />,
     },
   ];
+
+  const { user } = useAuth();
 
   return (
     <div className="drawer lg:drawer-open">
@@ -62,27 +65,55 @@ function MainLayout() {
               <Logo />
             </div>
 
-            <div className="flex justify-center gap-5">
-              <NavLink to="/sign-up" className={"my-btn bg-purple-300"}>
-                <span>
-                  <IoMdLogIn />
-                </span>
-                Sign Up
-              </NavLink>
-              <NavLink
-                to="/sign-in"
-                className={
-                  "my-btn bg-primary-dark text-purple-100 hover:bg-purple-300 hover:text-black "
-                }
-              >
-                <span>
-                  <IoMdLogIn />
-                </span>
-                Sign In
-              </NavLink>
-            </div>
+            {user ? (
+              <div className="flex flex-col items-center justify-center">
+                <div className="w-14 h-14 rounded-full cursor-pointer">
+                  <img
+                    className="object-cover rounded-full w-full h-full"
+                    src="https://sb.kaleidousercontent.com/67418/960x550/d1e78c2a25/individuals-a.png"
+                    alt=""
+                  />
+                </div>
+                <h3>{user?.email}</h3>
+              </div>
+            ) : (
+              <div className="flex justify-center gap-5">
+                <NavLink to="/sign-up" className={"my-btn bg-purple-300"}>
+                  <span>
+                    <IoMdLogIn />
+                  </span>
+                  Sign Up
+                </NavLink>
+                <NavLink
+                  to="/sign-in"
+                  className={
+                    "my-btn bg-primary-dark text-purple-100 hover:bg-purple-300 hover:text-black "
+                  }
+                >
+                  <span>
+                    <IoMdLogIn />
+                  </span>
+                  Sign In
+                </NavLink>
+              </div>
+            )}
           </div>
           {/* Sidebar content here */}
+
+          {user && (
+            <>
+              <li>
+                <NavLink to="/dashboard">
+                  <span>
+                    <IoMdLogIn />
+                  </span>
+                  dashboard
+                </NavLink>
+              </li>
+              <div className="divider"></div>
+            </>
+          )}
+
           {NavLinkList.map((list, i) => (
             <li key={i} className="mb-1">
               <NavLink to={list.to}>

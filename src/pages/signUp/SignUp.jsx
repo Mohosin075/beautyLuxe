@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
 import { NavLink } from "react-router";
+import { toast } from "sonner";
+import useAuth from "../../hooks/useAuth";
 
 function SignUp() {
+  const { createUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -11,7 +14,15 @@ function SignUp() {
   } = useForm();
 
   const handleSignUp = (data) => {
-    console.log(data);
+    createUser(data.email, data.password)
+      .then((result) => {
+        if (result.user) {
+          toast.success("User created Successfully!");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
 
   return (
@@ -90,7 +101,7 @@ function SignUp() {
                   <div>
                     <label>Email : </label>
                     <input
-                      type="text"
+                      type="email"
                       {...register("email", { required: true })}
                       className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
                       placeholder="Enter Your Email"
@@ -104,7 +115,7 @@ function SignUp() {
                   <div>
                     <label>Password : </label>
                     <input
-                      type="text"
+                      type="password"
                       {...register("password", {
                         required: "password is required",
                         pattern: {
@@ -124,7 +135,7 @@ function SignUp() {
                   <div>
                     <label>Confirm Password : </label>
                     <input
-                      type="text"
+                      type="password"
                       {...register("confirmPassword", {
                         required: "confirm password is required",
                         validate: (value) =>
