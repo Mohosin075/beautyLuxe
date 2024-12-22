@@ -1,8 +1,5 @@
-
 function Overview() {
-  return (
-    <div>Overview</div>
-  )
+  return <div>This is admin dashboard</div>;
 }
 
-export default Overview
+export default Overview;

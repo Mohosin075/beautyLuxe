@@ -3,6 +3,7 @@ import { IoHome } from "react-icons/io5";
 import { MdContactPhone } from "react-icons/md";
 import { FaAccusoft } from "react-icons/fa";
 import { AiOutlineProduct } from "react-icons/ai";
+import { LuLayoutDashboard } from "react-icons/lu";
 import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
@@ -32,7 +33,13 @@ function MainLayout() {
     },
   ];
 
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut().then((result) => {
+      console.log(result);
+    });
+  };
 
   return (
     <div className="drawer lg:drawer-open">
@@ -66,15 +73,24 @@ function MainLayout() {
             </div>
 
             {user ? (
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center space-y-2">
                 <div className="w-14 h-14 rounded-full cursor-pointer">
                   <img
                     className="object-cover rounded-full w-full h-full"
-                    src="https://sb.kaleidousercontent.com/67418/960x550/d1e78c2a25/individuals-a.png"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPjLlc8_9N9l9qB0fPxZSGMtF4mfEr68qusA&s"
                     alt=""
                   />
                 </div>
                 <h3>{user?.email}</h3>
+                <button
+                  onClick={handleLogOut}
+                  className={"my-btn bg-purple-300"}
+                >
+                  <span>
+                    <IoMdLogIn />
+                  </span>
+                  Log Out
+                </button>
               </div>
             ) : (
               <div className="flex justify-center gap-5">
@@ -105,7 +121,7 @@ function MainLayout() {
               <li>
                 <NavLink to="/dashboard">
                   <span>
-                    <IoMdLogIn />
+                    <LuLayoutDashboard />
                   </span>
                   dashboard
                 </NavLink>
