@@ -9,13 +9,16 @@ function MyProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const { userFromDb } = useUserFromDB();
+  const token = localStorage.getItem("beautyLuxe");
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
 
       await axios
-        .get(`http://localhost:3000/products/${userFromDb?.email}`)
+        .get(`http://localhost:3000/products/${userFromDb?.email}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => {
           if (res.data) {
             setProducts(res.data);
@@ -30,7 +33,7 @@ function MyProducts() {
     if (userFromDb) {
       fetchProducts();
     }
-  }, [userFromDb]);
+  }, [userFromDb, token]);
 
   if (loading) {
     return <Loading />;
@@ -48,6 +51,11 @@ function MyProducts() {
             <ProductCart key={product._id} product={product} />
           ))}
         </div>
+        {products.length === 0 && (
+          <div>
+            <h3 className="text-3xl text-center">Not Product here</h3>
+          </div>
+        )}
       </div>
     </div>
   );
