@@ -1,3 +1,4 @@
+import Contact from "../contact/Contact";
 import FAQs from "./FAQs/FAQs";
 import FeaturedProducts from "./FeaturedProducts/FeaturedProducts";
 import HeroSection from "./heroSection/HeroSection";
@@ -10,6 +11,7 @@ function Home() {
       <FeaturedProducts />
       <Testimonials />
       <FAQs />
+      <Contact />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import SectionTitle from "../../components/SectionTitle";
 import useAuth from "./../../hooks/useAuth";
 import { useState } from "react";
+import { FiMail, FiMapPin, FiPhone } from "react-icons/fi";
 
 function Contact() {
   const { user } = useAuth();
@@ -22,18 +23,49 @@ function Contact() {
               <p className="mt-5 text-center text-sm text-secondary-dark">
                 We’d Love to Hear From You! Whether you have questions about our
                 products, need assistance with your order, or just want to share
-                your thoughts, we’re here to help. Connect with us and let’s
-                make your Beauty Luxe experience exceptional!
+                <span className="hidden md:block">your thoughts, we’re here to help. Connect with us and let’s
+                make your Beauty Luxe experience exceptional!</span>
               </p>
               <div className="divider"></div>
               <div className="w-full h-full flex flex-col xl:flex-row justify-between items-center gap-8">
-                <div className="xl:w-1/2 h-full hidden xl:block">
-                  <img
-                    className="w-full h-full object-contain rounded-lg"
-                    src="https://i.ibb.co.com/DCN76KN/online-reservation-section-beauty-website-bowwe.webp"
-                    alt=""
-                  />
+                <div className="flex-1">
+                  <div className="flex items-start gap-6 mb-8">
+                    <div className="text-primary-dark text-4xl">
+                      <FiPhone />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-primary-dark">
+                        Phone
+                      </h3>
+                      <p className="text-gray-600">+1-800-555-1234</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-6 mb-8">
+                    <div className="text-primary-dark text-4xl">
+                      <FiMail />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-primary-dark">
+                        Email
+                      </h3>
+                      <p className="text-gray-600">support@beautyluxe.com</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-6">
+                    <div className="text-primary-dark text-4xl">
+                      <FiMapPin />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-primary-dark">
+                        Location
+                      </h3>
+                      <p className="text-gray-600">
+                        123 Beauty St, Luxe City, NY 10001
+                      </p>
+                    </div>
+                  </div>
                 </div>
+                <div className="divider"></div>
                 <form className="xl:w-1/2" onSubmit={handleSubmit}>
                   <div className="space-y-2">
                     <div>
