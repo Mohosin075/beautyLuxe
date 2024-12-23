@@ -13,7 +13,7 @@ import Loading from "../pages/loading/Loading";
 
 function MainLayout() {
   const { loading } = useAuth();
-  const { userFromDb, loading: dataLoading } = useUserFromDB();
+  const { userFromDb, loadStatus, setLoadStatus} = useUserFromDB();
 
   console.log(userFromDb);
 
@@ -55,8 +55,10 @@ function MainLayout() {
 
   const { user, logOut } = useAuth();
 
+
   const handleLogOut = () => {
     logOut().then((result) => {
+      setLoadStatus(!loadStatus)
       console.log(result);
     });
   };

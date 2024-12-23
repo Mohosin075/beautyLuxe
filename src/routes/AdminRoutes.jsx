@@ -8,9 +8,8 @@ function AdminRoutes({ children }) {
 
   const { userFromDb } = useUserFromDB();
 
-  console.log(userFromDb.role);
 
-  if (loading || !userFromDb.role) {
+  if (loading || !userFromDb?.role) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -18,7 +17,7 @@ function AdminRoutes({ children }) {
     );
   }
 
-  if (user && userFromDb.role === "admin") {
+  if (user && userFromDb?.role === "admin") {
     return children;
   }
 

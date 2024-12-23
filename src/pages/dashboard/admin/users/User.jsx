@@ -38,7 +38,7 @@ function User() {
           <div className="overflow-x-auto">
             <table className="table-auto table table-xs table-pin-rows w-full border-collapse border border-primary-dark bg-white max-h-screen">
               <thead>
-                <tr className="bg-primary-dark text-white">
+                <tr className="bg-primary-dark text-white text-center">
                   <th className="t-head">#</th>
                   <th className="t-head">Name</th>
                   <th className="t-head">Email</th>

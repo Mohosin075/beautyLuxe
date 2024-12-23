@@ -6,11 +6,7 @@ function BuyerRoutes({ children }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  const { userFromDb } = useUserFromDB();
-
-  console.log(userFromDb.role);
-
-  if (loading || !userFromDb.role) {
+  if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -18,7 +14,7 @@ function BuyerRoutes({ children }) {
     );
   }
 
-  if (user && userFromDb.role === "buyer") {
+  if (user) {
     return children;
   }
 

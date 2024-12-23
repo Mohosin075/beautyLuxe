@@ -8,9 +8,7 @@ function SellerRoutes({ children }) {
 
   const { userFromDb } = useUserFromDB();
 
-  console.log(userFromDb.role);
-
-  if (loading || !userFromDb.role) {
+  if (loading || !userFromDb?.role) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -18,7 +16,7 @@ function SellerRoutes({ children }) {
     );
   }
 
-  if (user && userFromDb.role === "seller") {
+  if (user && userFromDb?.role === "seller") {
     return children;
   }
 
