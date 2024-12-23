@@ -19,6 +19,7 @@ import SellerRoutes from "./SellerRoutes";
 import AdminRoutes from "./AdminRoutes";
 import BuyerRoutes from "./BuyerRoutes";
 import PrivateRoutes from "./PrivateRoutes";
+import UpdateProduct from "../pages/dashboard/updateProduct/UpdateProduct";
 
 function AppRoutes() {
   return (
@@ -92,6 +93,14 @@ function AppRoutes() {
             element={
               <SellerRoutes>
                 <MyProducts />
+              </SellerRoutes>
+            }
+          ></Route>
+          <Route
+            path="update-product/:productId"
+            element={
+              <SellerRoutes>
+                <UpdateProduct />
               </SellerRoutes>
             }
           ></Route>
