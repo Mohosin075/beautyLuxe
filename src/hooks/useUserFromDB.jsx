@@ -4,8 +4,11 @@ import axios from "axios";
 
 function useUserFromDB() {
   const { user } = useAuth();
-  const [userFromDb, setUserFromDb] = useState({});
+  const [userFromDb, setUserFromDb] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadStatus, setLoadStatus] = useState(false);
+
+  console.log({loadStatus});
 
   useEffect(() => {
     const token = localStorage.getItem("beautyLuxe");
@@ -26,8 +29,8 @@ function useUserFromDB() {
     if (user && token) {
       fetchUser();
     }
-  }, [user]);
-  return { userFromDb, loading };
+  }, [user, loadStatus]);
+  return { userFromDb, loading, loadStatus, setLoadStatus };
 }
 
 export default useUserFromDB;

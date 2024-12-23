@@ -4,11 +4,14 @@ import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
+import useUserFromDB from "../../hooks/useUserFromDB";
 
 function SignIn() {
   const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const {loadStatus, setLoadStatus} = useUserFromDB()
 
   const path = location?.state?.from?.pathname || '/'
 
@@ -22,7 +25,9 @@ function SignIn() {
     loginUser(data.email, data.password)
       .then((result) => {
         if (result.user) {
+          setLoadStatus(!loadStatus)
           toast.success("User Login Successfully!");
+          window.location.reload()
           navigate(path);
         }
         console.log(result.user);

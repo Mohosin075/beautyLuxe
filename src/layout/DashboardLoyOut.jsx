@@ -32,11 +32,12 @@ function DashboardLoyOut() {
 
   const { user, logOut } = useAuth();
 
-  const { userFromDb } = useUserFromDB();
+  const { userFromDb ,loadStatus, setLoadStatus} = useUserFromDB();
 
 
   const handleLogOut = () => {
     logOut().then((result) => {
+      setLoadStatus(!loadStatus)
       console.log(result);
     });
   };
@@ -142,7 +143,7 @@ function DashboardLoyOut() {
               </>
             )}
 
-            {userFromDb.role === "admin" &&
+            {userFromDb?.role === "admin" &&
               adminRoutes.map((list, i) => (
                 <li key={i} className="mb-1">
                   <NavLink to={`/dashboard/${list.to}`}>
@@ -151,7 +152,7 @@ function DashboardLoyOut() {
                   </NavLink>
                 </li>
               ))}
-            {userFromDb.role === "seller" &&
+            {userFromDb?.role === "seller" &&
               sellerRoutes.map((list, i) => (
                 <li key={i} className="mb-1">
                   <NavLink to={`/dashboard/${list.to}`}>
