@@ -8,8 +8,6 @@ function useUserFromDB() {
   const [loading, setLoading] = useState(false);
   const [loadStatus, setLoadStatus] = useState(false);
 
-  console.log({loadStatus});
-
   useEffect(() => {
     const token = localStorage.getItem("beautyLuxe");
     const fetchUser = async () => {

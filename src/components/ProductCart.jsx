@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NavLink } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
@@ -52,9 +53,12 @@ function ProductCart({ product, isSeller, change, setChange }) {
       </div>
       {isSeller ? (
         <div className="flex justify-between gap-20">
-          <button className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition">
+          <NavLink
+            className="mt-4 w-full text-center py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+            to={`/dashboard/update-product/${product._id}`}
+          >
             Edit
-          </button>
+          </NavLink>
           <button
             onClick={() => handleDelete(product._id)}
             className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-700  transition"
