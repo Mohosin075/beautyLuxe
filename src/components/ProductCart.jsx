@@ -2,9 +2,12 @@ import axios from "axios";
 import { NavLink } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import useUserFromDB from "../hooks/useUserFromDB";
 
 /* eslint-disable react/prop-types */
 function ProductCart({ product, isSeller, change, setChange }) {
+  const { userFromDb } = useUserFromDB();
+
   const handleDelete = (id) => {
     const token = localStorage.getItem("beautyLuxe");
     Swal.fire({
@@ -34,9 +37,11 @@ function ProductCart({ product, isSeller, change, setChange }) {
   const { name, image, description, stock, price, category, rating } = product;
   return (
     <div className="bg-secondary-light rounded-lg shadow-md hover:shadow-lg transition-shadow">
-      <img src={image} className="h-40 w-full object-cover rounded-md mb-4" />
-      <div className="p-4">
-        <h2 className="text-xl font-semibold mb-2">{name}</h2>
+      <img src={image} className="h-40 w-full object-cover rounded-md mb-1" />
+      <div className="p-4 space-y-0">
+        <h2 className="text-lg font-semibold mb-2">
+          {name?.length < 20 ? name : name?.slice(0, 20)}...
+        </h2>
         <p className="mb-3">
           {description?.length < 30
             ? description?.length
@@ -53,26 +58,36 @@ function ProductCart({ product, isSeller, change, setChange }) {
           <p className="text-gray-700 mb-3">Rating : {rating}</p>
         </div>
         {isSeller ? (
-          <div className="flex justify-between gap-20">
+          <div className="flex flex-col justify-between space-y-2">
             <NavLink
               className="mt-4 w-full text-center py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
               to={`/dashboard/update-product/${product._id}`}
             >
-              Edit
+              Edit Product
             </NavLink>
             <button
               onClick={() => handleDelete(product._id)}
               className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-700  transition"
             >
-              Delete
+              Delete Product
             </button>
           </div>
         ) : (
-          <div className="flex justify-between gap-20">
-            <button className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition">
+          <div className="flex flex-col justify-between space-y-2">
+            <button
+              disabled={
+                userFromDb?.role === "admin" || userFromDb?.role === "seller"
+              }
+              className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+            >
               add to wishlist
             </button>
-            <button className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-700  transition">
+            <button
+              disabled={
+                userFromDb?.role === "admin" || userFromDb?.role === "seller"
+              }
+              className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-700  transition"
+            >
               Add to cart
             </button>
           </div>

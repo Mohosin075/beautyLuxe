@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdSearch } from "react-icons/md";
 
-function FilterSearch({ onSearch, onSort, onFilter }) {
+function FilterSearch({ onSearch, onSort, onFilter, categories }) {
   const { register, handleSubmit } = useForm();
   const [filters, setFilters] = useState({
     search: "",
     category: "",
     rating: "",
-    sortBy: "priceAsc",
+    sortBy: "",
   });
 
   // Handle form submit to trigger the search, sort, and filter
@@ -58,11 +59,10 @@ function FilterSearch({ onSearch, onSort, onFilter }) {
             </label>
             <select
               {...register("sortBy")}
-              defaultValue={filters.sortBy}
               className="p-2 w-full border-b-4 outline-none border-primary-dark text-sm bg-purple-200"
             >
-              <option value="priceAsc">Low to High</option>
-              <option value="priceDesc">High to Low</option>
+              <option value="asc">Low to High</option>
+              <option value="dsc">High to Low</option>
             </select>
           </div>
 
@@ -80,15 +80,16 @@ function FilterSearch({ onSearch, onSort, onFilter }) {
               className="p-2 w-full border-b-4 outline-none border-primary-dark text-sm bg-purple-200"
             >
               <option value="">All Categories</option>
-              <option value="Skincare">Skincare</option>
-              <option value="Makeup">Makeup</option>
-              <option value="Fragrance">Fragrance</option>
-              <option value="Haircare">Haircare</option>
+              {categories?.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
 
           {/* Rating Filter */}
-          <div className="w-full">
+          {/* <div className="w-full">
             <label
               htmlFor="rating"
               className="block text-sm lg:text-lg font-semibold mb-2"
@@ -105,7 +106,7 @@ function FilterSearch({ onSearch, onSort, onFilter }) {
               <option value="4.5">4.5 Stars & Above</option>
               <option value="5">5 Stars</option>
             </select>
-          </div>
+          </div> */}
         </div>
 
         {/* Submit Button */}

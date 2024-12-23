@@ -13,7 +13,7 @@ import Loading from "../pages/loading/Loading";
 
 function MainLayout() {
   const { loading } = useAuth();
-  const { userFromDb, loadStatus, setLoadStatus} = useUserFromDB();
+  const { userFromDb, loadStatus, setLoadStatus } = useUserFromDB();
 
   console.log(userFromDb);
 
@@ -24,6 +24,11 @@ function MainLayout() {
       icon: <IoHome />,
     },
     {
+      label: "Product",
+      to: "/products",
+      icon: <AiOutlineProduct />,
+    },
+    {
       label: "About",
       to: "/about",
       icon: <FaAccusoft />,
@@ -32,11 +37,6 @@ function MainLayout() {
       label: "Contact",
       to: "/contact",
       icon: <MdContactPhone />,
-    },
-    {
-      label: "Product",
-      to: "/products",
-      icon: <AiOutlineProduct />,
     },
   ];
 
@@ -55,10 +55,9 @@ function MainLayout() {
 
   const { user, logOut } = useAuth();
 
-
   const handleLogOut = () => {
     logOut().then((result) => {
-      setLoadStatus(!loadStatus)
+      setLoadStatus(!loadStatus);
       console.log(result);
     });
   };
