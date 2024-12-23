@@ -42,7 +42,7 @@ function Products() {
     return <Loading />;
   }
   return (
-    <div className="min-h-screen bg-primary-light py-10 px-4">
+    <div className="min-h-screen bg-primary-light py-10 px-4 relative">
       <div className="container mx-auto">
         <div>
           <div className="hidden lg:block">
