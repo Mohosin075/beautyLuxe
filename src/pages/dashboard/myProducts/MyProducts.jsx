@@ -8,10 +8,9 @@ import ProductCart from "../../../components/ProductCart";
 function MyProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [change, setChange] = useState(false)
+  const [change, setChange] = useState(false);
   const { userFromDb } = useUserFromDB();
   const token = localStorage.getItem("beautyLuxe");
-
 
   console.log(change);
 
@@ -20,9 +19,12 @@ function MyProducts() {
       setLoading(true);
 
       await axios
-        .get(`http://localhost:3000/products/${userFromDb?.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        .get(
+          `https://beauty-luxe-server.vercel.app/products/${userFromDb?.email}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
         .then((res) => {
           if (res.data) {
             setProducts(res.data);
@@ -39,10 +41,6 @@ function MyProducts() {
     }
   }, [userFromDb, token, change]);
 
-
-  
-
-
   if (loading) {
     return <Loading />;
   }
@@ -56,7 +54,13 @@ function MyProducts() {
         />
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-8">
           {products.map((product) => (
-            <ProductCart key={product._id} product={product} isSeller setChange={setChange} change={change}/>
+            <ProductCart
+              key={product._id}
+              product={product}
+              isSeller
+              setChange={setChange}
+              change={change}
+            />
           ))}
         </div>
         {products.length === 0 && (

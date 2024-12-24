@@ -21,7 +21,7 @@ function ProductCart({ product, isSeller, change, setChange }) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3000/product/${id}`, {
+          .delete(`https://beauty-luxe-server.vercel.app/product/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {

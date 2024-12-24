@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 import SectionTitle from "../../components/SectionTitle";
 import Loading from "../loading/Loading";
@@ -8,7 +7,7 @@ import ProductCart from "../../components/ProductCart";
 import FilterSearch from "../../components/FilterSearch";
 
 function Products() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
@@ -22,35 +21,30 @@ function Products() {
 
   console.log({ search, sort, category });
   console.log(products);
+
   useEffect(() => {
+    // Fetch products data
+    setLoading(true);
     const fetchProducts = async () => {
-      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://beauty-luxe-server.vercel.app/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
 
-      // `http://localhost:3000/all-product?page=${page}&limit=${limit}&title=${search}&brand=${brand}&category=${category}&sort=${sort}
-
-      await axios
-        .get(
-          `http://localhost:3000/products?page=${page}&title=${search}&category=${category}&sort=${sort}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data) {
-            setProducts(res.data);
-            setTotalPage(Math.ceil(res.data.total / Number(12)));
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        setTotalPage(Math.ceil(data?.total / Number(12)));
+        setProducts(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (userFromDb) {
-      fetchProducts();
-    }
+    fetchProducts();
   }, [userFromDb, token, page, category, search, sort]);
 
   const onSearch = (text) => {
@@ -91,7 +85,7 @@ function Products() {
           </div>
         </div>
 
-        {products.length === 0 ? (
+        {products?.product?.length === 0 ? (
           <div>
             <h3 className="text-3xl text-center">Not Product here</h3>
           </div>

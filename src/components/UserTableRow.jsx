@@ -7,8 +7,7 @@ import Swal from "sweetalert2";
 import { NavLink } from "react-router";
 
 function UserTableRow({ user, i }) {
-
-    const token = localStorage.getItem("beautyLuxe");
+  const token = localStorage.getItem("beautyLuxe");
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -21,7 +20,7 @@ function UserTableRow({ user, i }) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3000/user/${id}`, {
+          .delete(`https://beauty-luxe-server.vercel.app/user/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {

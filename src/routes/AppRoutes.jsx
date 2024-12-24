@@ -26,13 +26,13 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         {/* Main Layout here */}
+        <Route path="sign-in" element={<SignIn />} />
+        <Route path="sign-up" element={<SignUp />} />
         <Route element={<App />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="products" element={<Products />} />
-          <Route path="sign-in" element={<SignIn />} />
-          <Route path="sign-up" element={<SignUp />} />
           {/* for buyer */}
           <Route
             path="wishlist"

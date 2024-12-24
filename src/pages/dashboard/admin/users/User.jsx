@@ -11,7 +11,7 @@ function User() {
     const fetchUser = async () => {
       setLoading(true);
       axios
-        .get(`http://localhost:3000/users`, {
+        .get(`https://beauty-luxe-server.vercel.app/users`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -24,9 +24,6 @@ function User() {
 
     fetchUser();
   }, [allUser]);
-
-
-  
 
   return (
     <div>
@@ -51,7 +48,9 @@ function User() {
               </thead>
               <tbody>
                 {allUser.length > 0 &&
-                  allUser.map((user, i) => <UserTableRow user={user} key={i} i={i}/>)}
+                  allUser.map((user, i) => (
+                    <UserTableRow user={user} key={i} i={i} />
+                  ))}
               </tbody>
             </table>
             {allUser.length === 0 && (
