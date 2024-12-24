@@ -13,9 +13,7 @@ function FeaturedProducts() {
     setLoading(true);
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          `https://beauty-luxe-server.vercel.app/products`
-        );
+        const response = await fetch(`http://localhost:3000/products`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

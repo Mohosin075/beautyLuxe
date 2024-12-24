@@ -42,7 +42,7 @@ function AddProduct() {
       if (result.isConfirmed) {
         setLoading(true);
         await axios
-          .post("https://beauty-luxe-server.vercel.app/product", productData, {
+          .post("http://localhost:3000/product", productData, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {

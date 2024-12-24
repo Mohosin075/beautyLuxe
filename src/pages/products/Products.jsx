@@ -12,6 +12,7 @@ function Products() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
   const [category, setCategory] = useState("");
+  const [latestData, setLatestData] = useState(false);
 
   const { userFromDb } = useUserFromDB();
   const token = localStorage.getItem("beautyLuxe");
@@ -19,16 +20,13 @@ function Products() {
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
 
-  console.log({ search, sort, category });
-  console.log(products);
-
   useEffect(() => {
     // Fetch products data
     setLoading(true);
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `https://beauty-luxe-server.vercel.app/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
+          `http://localhost:3000/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -93,7 +91,12 @@ function Products() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
               {products?.product?.map((product) => (
-                <ProductCart key={product._id} product={product} />
+                <ProductCart
+                  key={product._id}
+                  product={product}
+                  latestData={latestData}
+                  setLatestData={setLatestData}
+                />
               ))}
             </div>
             <div className="flex justify-center my-8 w-full">

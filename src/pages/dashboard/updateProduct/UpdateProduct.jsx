@@ -20,7 +20,7 @@ function UpdateProduct() {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(
-          `https://beauty-luxe-server.vercel.app/product/${productId}`,
+          `http://localhost:3000/product/${productId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -64,13 +64,9 @@ function UpdateProduct() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios
-          .patch(
-            `https://beauty-luxe-server.vercel.app/product/${singleProduct?._id}`,
-            data,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
+          .patch(`http://localhost:3000/product/${singleProduct?._id}`, data, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
           .then((res) => {
             if (res) {
               toast.success("Product updated successfully!");

@@ -11,7 +11,7 @@ function User() {
     const fetchUser = async () => {
       setLoading(true);
       axios
-        .get(`https://beauty-luxe-server.vercel.app/users`, {
+        .get(`http://localhost:3000/users`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {

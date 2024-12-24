@@ -19,12 +19,9 @@ function MyProducts() {
       setLoading(true);
 
       await axios
-        .get(
-          `https://beauty-luxe-server.vercel.app/products/${userFromDb?.email}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        .get(`http://localhost:3000/products/${userFromDb?.email}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => {
           if (res.data) {
             setProducts(res.data);

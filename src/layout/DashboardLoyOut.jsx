@@ -43,7 +43,7 @@ function DashboardLoyOut() {
     const fetchUser = async () => {
       setUserLoading(true);
       axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user?.email}`, {
+        .get(`http://localhost:3000/user/${user?.email}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -51,13 +51,12 @@ function DashboardLoyOut() {
           if (res.data) {
             setUserFromDb(res.data);
             setUserLoading(false);
-            
           }
         });
     };
 
     // if (user && token) {
-      fetchUser();
+    fetchUser();
     // }
   }, [user]);
 
@@ -177,8 +176,8 @@ function DashboardLoyOut() {
                     <span>{list.icon}</span>
                     {list.label}
                   </NavLink>
-                </li>  
-              ))} 
+                </li>
+              ))}
             {userFromDb?.role === "seller" &&
               sellerRoutes.map((list, i) => (
                 <li key={i} className="mb-1">
