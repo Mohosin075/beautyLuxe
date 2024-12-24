@@ -51,7 +51,7 @@ function ProductCart({
       })
       .then((res) => {
         if (res?.data?.modifiedCount === 1) {
-          navigate('/wishlist')
+          navigate("/wishlist");
           console.log(res.data);
           Swal.fire({
             position: "top-end",
@@ -90,7 +90,26 @@ function ProductCart({
       });
   };
 
-  const handleAddToCard = () => {};
+  const handleAddToCard = async () => {
+    await axios
+      .post(`http://localhost:3000/card`, {
+        email: userFromDb?.email,
+        productId: product?._id,
+        quantity: 1,
+      })
+      .then((res) => {
+        if (res?.data?.insertedId === 1) {
+          navigate('/my-cart')
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Added successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
 
   const { name, image, description, stock, price, category, rating } = product;
   return (

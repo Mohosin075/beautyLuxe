@@ -1,5 +1,11 @@
+import DashboardOverview from "../../../components/DashboardOverview";
+
 function Overview() {
-  return <div>This is admin dashboard</div>;
+  return (
+    <div>
+      <DashboardOverview />
+    </div>
+  );
 }
 
 export default Overview;
