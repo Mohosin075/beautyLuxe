@@ -6,9 +6,13 @@ import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
-import useUserFromDB from "../hooks/useUserFromDB";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function DashboardLoyOut() {
+  const [userLoading, setUserLoading] = useState(false);
+  const [userFromDb, setUserFromDb] = useState(null);
+
   const adminRoutes = [
     {
       label: "Manage User",
@@ -32,18 +36,39 @@ function DashboardLoyOut() {
 
   const { user, logOut } = useAuth();
 
-  const { userFromDb ,loadStatus, setLoadStatus} = useUserFromDB();
+  // const { userFromDb ,loadStatus, setLoadStatus} = useUserFromDB();
 
+  useEffect(() => {
+    const token = localStorage.getItem("beautyLuxe");
+    const fetchUser = async () => {
+      setUserLoading(true);
+      axios
+        .get(`http://localhost:3000/user/${user?.email}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.data) {
+            setUserFromDb(res.data);
+            setUserLoading(false);
+          }
+        });
+    };
+
+    // if (user && token) {
+    fetchUser();
+    // }
+  }, [user]);
 
   const handleLogOut = () => {
     logOut().then((result) => {
-      setLoadStatus(!loadStatus)
+      // setLoadStatus(!loadStatus);
       console.log(result);
     });
   };
 
   return (
-    <div  className="max-w-[1600px] mx-auto">
+    <div className="max-w-[1600px] mx-auto">
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
@@ -120,7 +145,8 @@ function DashboardLoyOut() {
             </div>
             {/* Sidebar content here */}
 
-            {user && (
+            {(userFromDb?.role === "admin" ||
+              userFromDb?.role === "seller") && (
               <>
                 <li>
                   <NavLink to="/dashboard">

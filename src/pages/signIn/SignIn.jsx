@@ -10,10 +10,14 @@ function SignIn() {
   const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { userFromDb } = useUserFromDB();
 
-  const {loadStatus, setLoadStatus} = useUserFromDB()
+  const { loadStatus, setLoadStatus } = useUserFromDB();
 
-  const path = location?.state?.from?.pathname || '/'
+  const path = location?.state?.from?.pathname || "/";
+
+  console.log(location);
+  console.log(path);
 
   const {
     register,
@@ -25,9 +29,8 @@ function SignIn() {
     loginUser(data.email, data.password)
       .then((result) => {
         if (result.user) {
-          setLoadStatus(!loadStatus)
+          setLoadStatus(!loadStatus);
           toast.success("User Login Successfully!");
-          window.location.reload()
           navigate(path);
         }
         console.log(result.user);

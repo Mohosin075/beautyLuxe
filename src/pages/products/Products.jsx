@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 import SectionTitle from "../../components/SectionTitle";
 import Loading from "../loading/Loading";
@@ -8,11 +7,12 @@ import ProductCart from "../../components/ProductCart";
 import FilterSearch from "../../components/FilterSearch";
 
 function Products() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
   const [category, setCategory] = useState("");
+  const [latestData, setLatestData] = useState(false);
 
   const { userFromDb } = useUserFromDB();
   const token = localStorage.getItem("beautyLuxe");
@@ -20,37 +20,29 @@ function Products() {
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
 
-  console.log({ search, sort, category });
-  console.log(products);
   useEffect(() => {
+    // Fetch products data
+    setLoading(true);
     const fetchProducts = async () => {
-      setLoading(true);
+      try {
+        const response = await fetch(
+          `http://localhost:3000/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
 
-      // `http://localhost:3000/all-product?page=${page}&limit=${limit}&title=${search}&brand=${brand}&category=${category}&sort=${sort}
-
-      await axios
-        .get(
-          `http://localhost:3000/products?page=${page}&title=${search}&category=${category}&sort=${sort}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data) {
-            setProducts(res.data);
-            setTotalPage(Math.ceil(res.data.total / Number(12)));
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        setTotalPage(Math.ceil(data?.total / Number(12)));
+        setProducts(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (userFromDb) {
-      fetchProducts();
-    }
+    fetchProducts();
   }, [userFromDb, token, page, category, search, sort]);
 
   const onSearch = (text) => {
@@ -91,7 +83,7 @@ function Products() {
           </div>
         </div>
 
-        {products.length === 0 ? (
+        {products?.product?.length === 0 ? (
           <div>
             <h3 className="text-3xl text-center">Not Product here</h3>
           </div>
@@ -99,7 +91,12 @@ function Products() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
               {products?.product?.map((product) => (
-                <ProductCart key={product._id} product={product} />
+                <ProductCart
+                  key={product._id}
+                  product={product}
+                  latestData={latestData}
+                  setLatestData={setLatestData}
+                />
               ))}
             </div>
             <div className="flex justify-center my-8 w-full">

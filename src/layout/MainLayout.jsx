@@ -8,14 +8,38 @@ import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
-import useUserFromDB from "../hooks/useUserFromDB";
 import Loading from "../pages/loading/Loading";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function MainLayout() {
-  const { loading } = useAuth();
-  const { userFromDb, loadStatus, setLoadStatus } = useUserFromDB();
+  const { user, logOut, loading } = useAuth();
+  const [userLoading, setUserLoading] = useState(false);
+  const [userFromDb, setUserFromDb] = useState(null);
+  // const { userFromDb, loadStatus, setLoadStatus } = useUserFromDB();
 
-  console.log(userFromDb);
+
+  useEffect(() => {
+    const token = localStorage.getItem("beautyLuxe");
+    const fetchUser = async () => {
+      setUserLoading(true);
+      axios
+        .get(`http://localhost:3000/user/${user.email}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.data) {
+            setUserLoading(false);
+            setUserFromDb(res.data);
+          }
+        });
+    };
+
+    if (user && token) {
+      fetchUser();
+    }
+  }, [user, userFromDb?.role]);
 
   const NavLinkList = [
     {
@@ -53,11 +77,9 @@ function MainLayout() {
     },
   ];
 
-  const { user, logOut } = useAuth();
-
   const handleLogOut = () => {
     logOut().then((result) => {
-      setLoadStatus(!loadStatus);
+      // setLoadStatus(!loadStatus);
       console.log(result);
     });
   };
@@ -140,34 +162,32 @@ function MainLayout() {
             )}
           </div>
           {/* Sidebar content here */}
-
           {/* for admin and seller */}
-
-          {userFromDb?.role === "admin" || userFromDb?.role === "seller" ? (
-            <>
-              <li>
-                <NavLink to="/dashboard">
-                  <span>
-                    <LuLayoutDashboard />
-                  </span>
-                  dashboard
-                </NavLink>
-              </li>
-              <div className="divider"></div>
-            </>
-          ) : (
-            <>
-              {buyerRoutes.map((list, i) => (
+          {(userFromDb?.role === "admin" || userFromDb?.role === "seller") && (
+            <li>
+              <NavLink to="/dashboard">
+                <span>
+                  <LuLayoutDashboard />
+                </span>
+                dashboard
+              </NavLink>
+            </li>
+          )}
+          <>
+            {userFromDb?.role === "admin" || userFromDb?.role === "seller" ? (
+              <></>
+            ) : (
+              buyerRoutes.map((list, i) => (
                 <li key={i} className="mb-1">
                   <NavLink to={list.to}>
                     <span>{list.icon}</span>
                     {list.label}
                   </NavLink>
                 </li>
-              ))}
-              <div className="divider"></div>
-            </>
-          )}
+              ))
+            )}
+            <div className="divider"></div>
+          </>
 
           {/* buyer routes */}
           {/* {userFromDb?.role === "buyer" && (
@@ -183,7 +203,6 @@ function MainLayout() {
               <div className="divider"></div>
             </>
           )} */}
-
           {/* for common route */}
           {NavLinkList.map((list, i) => (
             <li key={i} className="mb-1">

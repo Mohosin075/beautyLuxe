@@ -1,7 +1,5 @@
-import axios from "axios";
 import Loading from "../../loading/Loading";
 import { useEffect, useState } from "react";
-import useUserFromDB from "../../../hooks/useUserFromDB";
 import SectionTitle from "../../../components/SectionTitle";
 import ProductCart from "../../../components/ProductCart";
 import { NavLink } from "react-router";
@@ -9,33 +7,27 @@ import { NavLink } from "react-router";
 function FeaturedProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { userFromDb } = useUserFromDB();
-  const token = localStorage.getItem("beautyLuxe");
 
   useEffect(() => {
+    // Fetch products data
+    setLoading(true);
     const fetchProducts = async () => {
-      setLoading(true);
-
-      await axios
-        .get(`http://localhost:3000/products/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.data) {
-            setProducts(res.data);
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      try {
+        const response = await fetch(`http://localhost:3000/products`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (userFromDb) {
-      fetchProducts();
-    }
-  }, [userFromDb, token]);
+    fetchProducts();
+  }, []);
 
   if (loading) {
     return <Loading />;
@@ -69,8 +61,8 @@ function FeaturedProducts() {
             ))}
           </div>
         )}
-        <NavLink to='/products' className="flex justify-center mt-14">
-            <button className="my-btn text-xl">see more</button>
+        <NavLink to="/products" className="flex justify-center mt-14">
+          <button className="my-btn text-xl">see more</button>
         </NavLink>
       </div>
     </div>

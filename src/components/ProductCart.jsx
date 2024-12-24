@@ -1,12 +1,21 @@
 import axios from "axios";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import useUserFromDB from "../hooks/useUserFromDB";
 
 /* eslint-disable react/prop-types */
-function ProductCart({ product, isSeller, change, setChange }) {
+function ProductCart({
+  product,
+  isSeller,
+  change,
+  setChange,
+  wishlist,
+  latestData,
+  setLatestData,
+}) {
   const { userFromDb } = useUserFromDB();
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     const token = localStorage.getItem("beautyLuxe");
@@ -33,6 +42,55 @@ function ProductCart({ product, isSeller, change, setChange }) {
       }
     });
   };
+
+  const handleWishlist = async () => {
+    await axios
+      .patch(`http://localhost:3000/add-wishlist`, {
+        userEmail: userFromDb?.email,
+        productId: product?._id,
+      })
+      .then((res) => {
+        if (res?.data?.modifiedCount === 1) {
+          navigate('/wishlist')
+          console.log(res.data);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Add successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // console.log({ setLatestData, latestData });
+          // if (setLatestData) {
+          //   setLatestData(!latestData);
+          // }
+        }
+      });
+  };
+
+  const removeFromWishList = async () => {
+    await axios
+      .patch(`http://localhost:3000/remove-wishlist`, {
+        userEmail: userFromDb?.email,
+        productId: product?._id,
+      })
+      .then((res) => {
+        if (res?.data?.modifiedCount === 1) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Remove successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          if (setLatestData) {
+            setLatestData(!latestData);
+          }
+        }
+      });
+  };
+
+  const handleAddToCard = () => {};
 
   const { name, image, description, stock, price, category, rating } = product;
   return (
@@ -74,15 +132,32 @@ function ProductCart({ product, isSeller, change, setChange }) {
           </div>
         ) : (
           <div className="flex flex-col justify-between space-y-2">
+            {wishlist ? (
+              <>
+                <button
+                  onClick={removeFromWishList}
+                  disabled={
+                    userFromDb?.role === "admin" ||
+                    userFromDb?.role === "seller"
+                  }
+                  className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+                >
+                  remove from wishlist
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleWishlist}
+                disabled={
+                  userFromDb?.role === "admin" || userFromDb?.role === "seller"
+                }
+                className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+              >
+                add to wishlist
+              </button>
+            )}
             <button
-              disabled={
-                userFromDb?.role === "admin" || userFromDb?.role === "seller"
-              }
-              className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
-            >
-              add to wishlist
-            </button>
-            <button
+              onClick={handleAddToCard}
               disabled={
                 userFromDb?.role === "admin" || userFromDb?.role === "seller"
               }

@@ -7,8 +7,7 @@ import Swal from "sweetalert2";
 import { NavLink } from "react-router";
 
 function UserTableRow({ user, i }) {
-
-    const token = localStorage.getItem("beautyLuxe");
+  const token = localStorage.getItem("beautyLuxe");
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

@@ -25,9 +25,6 @@ function User() {
     fetchUser();
   }, [allUser]);
 
-
-  
-
   return (
     <div>
       <div className="min-h-screen bg-primary-light flex items-center justify-center">
@@ -51,7 +48,9 @@ function User() {
               </thead>
               <tbody>
                 {allUser.length > 0 &&
-                  allUser.map((user, i) => <UserTableRow user={user} key={i} i={i}/>)}
+                  allUser.map((user, i) => (
+                    <UserTableRow user={user} key={i} i={i} />
+                  ))}
               </tbody>
             </table>
             {allUser.length === 0 && (
