@@ -28,7 +28,6 @@ function MainLayout() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          console.log(res);
           if (res.data) {
             setUserLoading(false);
             setUserFromDb(res.data);
