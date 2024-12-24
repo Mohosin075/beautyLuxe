@@ -19,7 +19,7 @@ function UpdateUser() {
     const fetchUser = async () => {
       setLoading(true);
       axios
-        .get(`http://localhost:3000/user/${email}`, {
+        .get(`https://beauty-luxe-server.vercel.app/user/${email}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -49,9 +49,13 @@ function UpdateUser() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios
-          .patch(`http://localhost:3000/user/${singleUser?._id}`, data, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
+          .patch(
+            `https://beauty-luxe-server.vercel.app/user/${singleUser?._id}`,
+            data,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
           .then((res) => {
             if (res) {
               toast.success("updated successfully!");

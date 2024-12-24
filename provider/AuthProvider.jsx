@@ -45,7 +45,7 @@ function AuthProvider({ children }) {
 
       if (currentUser && currentUser?.email) {
         axios
-          .post("http://localhost:3000/jwt", {
+          .post("https://beauty-luxe-server.vercel.app/jwt", {
             email: currentUser.email,
           })
           .then((data) => {

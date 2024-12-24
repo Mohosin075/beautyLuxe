@@ -30,9 +30,12 @@ function SocialLogin() {
 
         if (result.user) {
           await axios
-            .post(`http://localhost:3000/user/${result.user.email}`, {
-              userData,
-            })
+            .post(
+              `https://beauty-luxe-server.vercel.app/user/${result.user.email}`,
+              {
+                userData,
+              }
+            )
             .then((res) => {
               if (
                 res.data.insertedId ||

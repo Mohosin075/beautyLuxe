@@ -26,7 +26,7 @@ function Products() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
+          `https://beauty-luxe-server.vercel.app/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

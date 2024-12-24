@@ -20,7 +20,7 @@ function UserTableRow({ user, i }) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3000/user/${id}`, {
+          .delete(`https://beauty-luxe-server.vercel.app/user/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {

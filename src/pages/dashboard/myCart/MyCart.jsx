@@ -10,7 +10,7 @@ function MyCart() {
   const [carts, setCarts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0);
   const [cardStatus, setCardStatus] = useState(false);
 
   const { userFromDb } = useUserFromDB();
@@ -22,7 +22,7 @@ function MyCart() {
       setError("");
       try {
         const response = await axios.get(
-          `http://localhost:3000/card/${userFromDb?.email}`
+          `https://beauty-luxe-server.vercel.app/card/${userFromDb?.email}`
         );
         setCarts(response.data.items || []);
         setTotal(response.data.totalPrice);
@@ -44,7 +44,7 @@ function MyCart() {
     if (quantity < 1) return;
     setLoading(true);
     try {
-      await axios.patch("http://localhost:3000/card", {
+      await axios.patch("https://beauty-luxe-server.vercel.app/card", {
         email: userFromDb?.email,
         productId,
         quantity,
@@ -63,7 +63,7 @@ function MyCart() {
     setLoading(true);
     try {
       await axios.delete(
-        `http://localhost:3000/card/${userFromDb?.email}/${productId}`
+        `https://beauty-luxe-server.vercel.app/card/${userFromDb?.email}/${productId}`
       );
       // setCardStatus(!cardStatus)
       setCarts((prevCart) => prevCart.filter((item) => item._id !== productId));
@@ -77,7 +77,7 @@ function MyCart() {
   console.log(carts);
 
   const onCheckout = () => {
-    toast.info("This feature is't available right now")
+    toast.info("This feature is't available right now");
   };
 
   if (loading) {
@@ -105,7 +105,9 @@ function MyCart() {
       ) : (
         <div>
           <div className="mt-4 flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-gray-800">Total: ${total.toFixed(2)}</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Total: ${total.toFixed(2)}
+            </h2>
             <button
               className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700"
               onClick={onCheckout}

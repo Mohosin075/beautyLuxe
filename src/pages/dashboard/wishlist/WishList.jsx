@@ -22,7 +22,7 @@ function Wishlist() {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/wishlist/${user?.email}`,
+          `https://beauty-luxe-server.vercel.app/wishlist/${user?.email}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

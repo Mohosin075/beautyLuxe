@@ -13,7 +13,7 @@ function useUserFromDB() {
     const fetchUser = async () => {
       setLoading(true);
       axios
-        .get(`http://localhost:3000/user/${user.email}`, {
+        .get(`https://beauty-luxe-server.vercel.app/user/${user.email}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {

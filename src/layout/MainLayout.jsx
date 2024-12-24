@@ -18,13 +18,12 @@ function MainLayout() {
   const [userFromDb, setUserFromDb] = useState(null);
   // const { userFromDb, loadStatus, setLoadStatus } = useUserFromDB();
 
-
   useEffect(() => {
     const token = localStorage.getItem("beautyLuxe");
     const fetchUser = async () => {
       setUserLoading(true);
       axios
-        .get(`http://localhost:3000/user/${user.email}`, {
+        .get(`https://beauty-luxe-server.vercel.app/user/${user.email}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
