@@ -36,9 +36,12 @@ function SignUp() {
           };
 
           await axios
-            .post(`http://localhost:3000/user/${result.user.email}`, {
-              userData,
-            })
+            .post(
+              `https://beauty-luxe-server.vercel.app/user/${result.user.email}`,
+              {
+                userData,
+              }
+            )
             .then((res) => {
               console.log(res);
               if (res.data.insertedId) {

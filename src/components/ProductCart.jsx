@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import useUserFromDB from "../hooks/useUserFromDB";
+import useAuth from "../hooks/useAuth";
 
 /* eslint-disable react/prop-types */
 function ProductCart({
@@ -15,6 +16,7 @@ function ProductCart({
   setLatestData,
 }) {
   const { userFromDb } = useUserFromDB();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
@@ -30,7 +32,7 @@ function ProductCart({
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3000/product/${id}`, {
+          .delete(`https://beauty-luxe-server.vercel.app/product/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {
@@ -44,8 +46,12 @@ function ProductCart({
   };
 
   const handleWishlist = async () => {
+    if (!user) {
+      return navigate("/sign-in");
+    }
+
     await axios
-      .patch(`http://localhost:3000/add-wishlist`, {
+      .patch(`https://beauty-luxe-server.vercel.app/add-wishlist`, {
         userEmail: userFromDb?.email,
         productId: product?._id,
       })
@@ -70,7 +76,7 @@ function ProductCart({
 
   const removeFromWishList = async () => {
     await axios
-      .patch(`http://localhost:3000/remove-wishlist`, {
+      .patch(`https://beauty-luxe-server.vercel.app/remove-wishlist`, {
         userEmail: userFromDb?.email,
         productId: product?._id,
       })
@@ -91,15 +97,19 @@ function ProductCart({
   };
 
   const handleAddToCard = async () => {
+    if (!user) {
+      return navigate("/sign-in");
+    }
+
     await axios
-      .post(`http://localhost:3000/card`, {
+      .post(`https://beauty-luxe-server.vercel.app/card`, {
         email: userFromDb?.email,
         productId: product?._id,
         quantity: 1,
       })
       .then((res) => {
         if (res?.data?.insertedId === 1) {
-          navigate('/my-cart')
+          navigate("/my-cart");
           Swal.fire({
             position: "top-end",
             icon: "success",
@@ -116,9 +126,11 @@ function ProductCart({
     <div className="bg-secondary-light rounded-lg shadow-md hover:shadow-lg transition-shadow">
       <img src={image} className="h-40 w-full object-cover rounded-md mb-1" />
       <div className="p-4 space-y-0">
-        <h2 className="text-lg font-semibold mb-2">
-          {name?.length < 20 ? name : name?.slice(0, 20)}...
-        </h2>
+        <NavLink to={`/product/${product?._id}`}>
+          <h2 className="text-lg font-semibold mb-2 underline text-blue-600 cursor-pointer">
+            {name?.length < 20 ? name : name?.slice(0, 20)}...
+          </h2>
+        </NavLink>
         <p className="mb-3">
           {description?.length < 30
             ? description?.length

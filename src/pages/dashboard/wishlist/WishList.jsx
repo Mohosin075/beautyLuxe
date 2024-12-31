@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./../../loading/Loading";
 import SectionTitle from "./../../../components/SectionTitle";
-import useUserFromDB from "../../../hooks/useUserFromDB";
 import useAuth from "../../../hooks/useAuth";
 import ProductCart from "../../../components/ProductCart";
 
@@ -22,7 +21,7 @@ function Wishlist() {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/wishlist/${user?.email}`,
+          `https://beauty-luxe-server.vercel.app/wishlist/${user?.email}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -35,7 +34,7 @@ function Wishlist() {
       }
     };
 
-    if (token) {
+    if (user && token) {
       fetchWishlist();
     }
   }, [token, user, latestData]);

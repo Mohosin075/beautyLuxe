@@ -20,6 +20,8 @@ import AdminRoutes from "./AdminRoutes";
 import BuyerRoutes from "./BuyerRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 import UpdateProduct from "../pages/dashboard/updateProduct/UpdateProduct";
+import ProductDetails from "../components/ProductDetails";
+import CategoryTypes from "../pages/categoryTypes/CategoryTypes";
 
 function AppRoutes() {
   return (
@@ -33,6 +35,8 @@ function AppRoutes() {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="products" element={<Products />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="categories/:type" element={<CategoryTypes />} />
           {/* for buyer */}
           <Route
             path="wishlist"
