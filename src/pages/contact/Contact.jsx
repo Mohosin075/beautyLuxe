@@ -16,7 +16,7 @@ function Contact() {
   return (
     <div>
       <div className="flex justify-around  gap-7 bg-primary-light min-h-screen py-8">
-        <div className="p-10 rounded-md bg-primary-light w-9/12">
+        <div className="p-10 rounded-md bg-primary-light lg:w-9/12">
           <div className="w-full flex items-center justify-center">
             <div>
               <SectionTitle title={"Contact Us"} description={"Get In Touch"} />
@@ -82,7 +82,7 @@ function Contact() {
                       <input
                         type="email"
                         className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
-                        placeholder={user?.email}
+                        placeholder={user?.email || 'Enter your email'}
                         required
                       />
                     </div>

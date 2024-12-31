@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import useUserFromDB from "../hooks/useUserFromDB";
+import useAuth from "../hooks/useAuth";
 
 /* eslint-disable react/prop-types */
 function ProductCart({
@@ -15,6 +16,7 @@ function ProductCart({
   setLatestData,
 }) {
   const { userFromDb } = useUserFromDB();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
@@ -44,6 +46,10 @@ function ProductCart({
   };
 
   const handleWishlist = async () => {
+    if (!user) {
+      return navigate("/sign-in");
+    }
+
     await axios
       .patch(`https://beauty-luxe-server.vercel.app/add-wishlist`, {
         userEmail: userFromDb?.email,
@@ -91,6 +97,10 @@ function ProductCart({
   };
 
   const handleAddToCard = async () => {
+    if (!user) {
+      return navigate("/sign-in");
+    }
+
     await axios
       .post(`https://beauty-luxe-server.vercel.app/card`, {
         email: userFromDb?.email,

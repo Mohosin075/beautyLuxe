@@ -45,7 +45,7 @@ const FAQs = () => {
           description="Find answers to some of the most common questions about our products and services."
         />
         <div className="divider"></div>
-        <div className="container mx-auto px-4 w-9/12">
+        <div className="container mx-auto px-4 lg:w-9/12">
           <div className="mt-8 space-y-4">
             {faqs.map((faq, index) => (
               <div
