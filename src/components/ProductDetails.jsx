@@ -14,7 +14,9 @@ function ProductDetails() {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get(`http://localhost:3000/product/${id}`);
+        const response = await axios.get(
+          `https://beauty-luxe-server.vercel.app/${id}`
+        );
         setProduct(response.data);
       } catch (err) {
         setError("Failed to load product details.");
@@ -55,20 +57,20 @@ function ProductDetails() {
             {product.name}
           </h1>
           <p className="text-gray-600 mt-2">{product.description}</p>
-          
+
           <div className="flex justify-between items-center">
-          <p className="text-xl font-bold text-indigo-600 mt-4">
-            Price: ${product.price}
-          </p>
-          <p className="text-sm text-gray-600">Stock: {product.stock}</p>
-        </div>
-        <div className="flex justify-between items-center">
-          <p className="text-gray-700 mb-3">{product.category}</p>
-          <p className="text-gray-700 mb-3">Rating : {product.rating}</p>
-        </div>
+            <p className="text-xl font-bold text-indigo-600 mt-4">
+              Price: ${product.price}
+            </p>
+            <p className="text-sm text-gray-600">Stock: {product.stock}</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p className="text-gray-700 mb-3">{product.category}</p>
+            <p className="text-gray-700 mb-3">Rating : {product.rating}</p>
+          </div>
 
           <div className="flex items-center mt-4">
-            <NavLink to={'/products'}>
+            <NavLink to={"/products"}>
               <button className="btn btn-warning">
                 For add to card/wishlist go to product route
               </button>

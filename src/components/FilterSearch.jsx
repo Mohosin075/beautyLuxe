@@ -4,6 +4,10 @@ import { useForm } from "react-hook-form";
 import { MdSearch } from "react-icons/md";
 
 function FilterSearch({ onSearch, onSort, onFilter, categories }) {
+
+  console.log(categories);
+
+
   const { register, handleSubmit } = useForm();
   const [filters, setFilters] = useState({
     search: "",

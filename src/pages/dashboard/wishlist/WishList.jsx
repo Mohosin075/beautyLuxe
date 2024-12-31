@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./../../loading/Loading";
 import SectionTitle from "./../../../components/SectionTitle";
-import useUserFromDB from "../../../hooks/useUserFromDB";
 import useAuth from "../../../hooks/useAuth";
 import ProductCart from "../../../components/ProductCart";
 
@@ -35,7 +34,7 @@ function Wishlist() {
       }
     };
 
-    if (token) {
+    if (user && token) {
       fetchWishlist();
     }
   }, [token, user, latestData]);
