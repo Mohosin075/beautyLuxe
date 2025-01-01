@@ -22,6 +22,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import UpdateProduct from "../pages/dashboard/updateProduct/UpdateProduct";
 import ProductDetails from "../components/ProductDetails";
 import CategoryTypes from "../pages/categoryTypes/CategoryTypes";
+import ProfileManagement from "../components/ProfileManagement";
 
 function AppRoutes() {
   return (
@@ -37,6 +38,14 @@ function AppRoutes() {
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="categories/:type" element={<CategoryTypes />} />
+          <Route
+            path="manage-profile"
+            element={
+              <PrivateRoutes>
+                <ProfileManagement />
+              </PrivateRoutes>
+            }
+          ></Route>
           {/* for buyer */}
           <Route
             path="wishlist"

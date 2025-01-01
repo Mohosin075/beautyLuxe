@@ -22,7 +22,7 @@ function FeaturedProducts() {
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }

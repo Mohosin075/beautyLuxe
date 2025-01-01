@@ -1,9 +1,12 @@
-import MainLayout from "./layout/MainLayout";
+import { Outlet } from "react-router";
+import Navbar from "./components/shared/Navbar";
 
 function App() {
   return (
-    <div className="max-w-[1600px] mx-auto">
-      <MainLayout />
+    <div>
+      <Navbar />
+      <Outlet />
+      {/* <MainLayout /> */}
     </div>
   );
 }
