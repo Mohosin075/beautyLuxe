@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import useUserFromDB from "../hooks/useUserFromDB";
 import useAuth from "../hooks/useAuth";
+import useTheme from "../hooks/useTheme";
 
 /* eslint-disable react/prop-types */
 function ProductCart({
@@ -121,13 +122,21 @@ function ProductCart({
       });
   };
 
+  const { theme } = useTheme();
+
   const { name, image, description, stock, price, category, rating } = product;
   return (
-    <div className="bg-secondary-light rounded-lg shadow-md hover:shadow-lg transition-shadow">
+    <div
+      className={`rounded-lg shadow-md hover:shadow-lg transition-shadow ${
+        theme === "dark"
+          ? "border border-gray-900 hover:bg-darkGray"
+          : "hover:bg-lightGray"
+      }`}
+    >
       <img src={image} className="h-40 w-full object-cover rounded-md mb-1" />
       <div className="p-4 space-y-0">
         <NavLink to={`/product/${product?._id}`}>
-          <h2 className="text-lg font-semibold mb-2 underline text-blue-600 cursor-pointer">
+          <h2 className="text-lg font-semibold mb-2 underline cursor-pointer">
             {name?.length < 20 ? name : name?.slice(0, 20)}...
           </h2>
         </NavLink>
@@ -139,24 +148,24 @@ function ProductCart({
         </p>
 
         <div className="flex justify-between items-center">
-          <p className="font-semibold text-primary-dark">${price}</p>
-          <p className="text-sm text-gray-600">Stock: {stock}</p>
+          <p className="">${price}</p>
+          <p className="text-sm ">Stock: {stock}</p>
         </div>
         <div className="flex justify-between items-center">
-          <p className="text-gray-700 mb-3">{category}</p>
-          <p className="text-gray-700 mb-3">Rating : {rating}</p>
+          <p className="mb-3">{category}</p>
+          <p className=" mb-3">Rating : {rating}</p>
         </div>
         {isSeller ? (
           <div className="flex flex-col justify-between space-y-2">
             <NavLink
-              className="mt-4 w-full text-center py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+              className="navLink-style"
               to={`/dashboard/update-product/${product._id}`}
             >
               Edit Product
             </NavLink>
             <button
               onClick={() => handleDelete(product._id)}
-              className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-700  transition"
+              className="my-btn"
             >
               Delete Product
             </button>
@@ -171,7 +180,7 @@ function ProductCart({
                     userFromDb?.role === "admin" ||
                     userFromDb?.role === "seller"
                   }
-                  className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+                  className="mt-4 w-full py-2 rounded-md transition"
                 >
                   remove from wishlist
                 </button>
@@ -182,7 +191,7 @@ function ProductCart({
                 disabled={
                   userFromDb?.role === "admin" || userFromDb?.role === "seller"
                 }
-                className="mt-4 w-full py-2 bg-primary-dark text-white rounded-md hover:bg-purple-700 hover:text-white transition"
+                className="my-btn"
               >
                 add to wishlist
               </button>
@@ -192,7 +201,7 @@ function ProductCart({
               disabled={
                 userFromDb?.role === "admin" || userFromDb?.role === "seller"
               }
-              className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-700  transition"
+              className="my-btn"
             >
               Add to cart
             </button>

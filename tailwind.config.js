@@ -23,6 +23,9 @@ export default {
         buttonBackground: "rgba(0, 0, 0, 0.5)",
         backgroundLightOverlay: "rgba(0, 0, 0, 0.1)",
         backgroundDarkOverlay: "#111827",
+        darkGray : "#0F172A",
+        lightGray : "#F3F4F6",
+        background : "rgba(164, 61, 255, 0.1)"
       },
     },
   },

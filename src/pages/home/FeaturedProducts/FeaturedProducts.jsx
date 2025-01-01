@@ -36,7 +36,7 @@ function FeaturedProducts() {
   }
 
   return (
-    <div className="bg-primary-light py-10 px-4 relative">
+    <div className="py-10 px-4 relative">
       <div className="container mx-auto">
         <div>
           <div className="hidden lg:block">
@@ -46,7 +46,7 @@ function FeaturedProducts() {
             />
             <div className="divider"></div>
           </div>
-          {/* 
+          {/*   
           <div>
             <FilterSearch />
           </div> */}
