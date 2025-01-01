@@ -3,7 +3,10 @@
 @tailwind utilities;
 
 .my-btn {
-  @apply border px-3 py-2  rounded-md border-primary-dark hover:bg-primary-dark hover:text-white transition-all duration-100 font-semibold flex items-center justify-center gap-1;
+  @apply px-3 py-2  bg-primaryAccent text-white border-0 hover:text-white rounded-md transition-all duration-100 font-semibold flex items-center justify-center gap-1 hover:bg-opacity-90;
+}
+.navLink-style {
+  @apply flex items-center px-4 py-2 transition-all duration-75 rounded-md;
 }
 .t-head {
   @apply px-4 py-2 border border-primary-light;

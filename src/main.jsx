@@ -5,20 +5,23 @@ import AppRoutes from "./routes/AppRoutes";
 import { Toaster } from "sonner";
 import AuthProvider from "../provider/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ThemeProvider from "../provider/ThemeProvider";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Toaster
-        richColors
-        position="top-center"
-        toastOptions={{ classNames: { toast: "bg-purple-300" } }}
-      />
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <ThemeProvider>
+        <Toaster
+          richColors
+          position="top-center"
+          toastOptions={{ classNames: { toast: "bg-purple-300" } }}
+        />
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>
 );
