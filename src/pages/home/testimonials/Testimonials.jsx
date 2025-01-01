@@ -1,4 +1,5 @@
 import SectionTitle from "../../../components/SectionTitle";
+import useTheme from "../../../hooks/useTheme";
 
 const Testimonials = () => {
   const testimonials = [
@@ -27,8 +28,10 @@ const Testimonials = () => {
     },
   ];
 
+  const { theme } = useTheme();
+
   return (
-    <section className="bg-primary-light py-12">
+    <section className=" py-12">
       <div className="container mx-auto px-4">
         <SectionTitle
           title="What Our Customers Say"
@@ -39,7 +42,9 @@ const Testimonials = () => {
           {testimonials.map(({ id, name, feedback, image }) => (
             <div
               key={id}
-              className="p-6 bg-white shadow-lg rounded-md text-center"
+              className={`p-6 shadow-lg rounded-md text-center cursor-pointer ${
+                theme === "dark" ? "border border-gray-900 hover:bg-darkGray" : "hover:bg-lightGray"
+              }`}
             >
               <div className="flex justify-center mb-4">
                 {/* <img
@@ -55,7 +60,7 @@ const Testimonials = () => {
                 </div>
               </div>
               <h3 className="text-lg font-semibold mb-2">{name}</h3>
-              <p className="text-gray-600 italic">{feedback}</p>
+              <p className=" italic">{feedback}</p>
             </div>
           ))}
         </div>

@@ -8,10 +8,13 @@ import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useTheme from "../hooks/useTheme";
 
 function DashboardLoyOut() {
   const [userLoading, setUserLoading] = useState(false);
   const [userFromDb, setUserFromDb] = useState(null);
+
+  const { theme } = useTheme();
 
   const adminRoutes = [
     {
@@ -68,12 +71,18 @@ function DashboardLoyOut() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto">
+    <div
+      className={`max-w-[1600px] mx-auto ${
+        theme === "dark"
+          ? "bg-darkBackground text-textLight"
+          : "bg-lightBackground text-textDark"
+      }`}
+    >
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <div>
-            <header className="bg-purple-400 sticky top-0 flex lg:bg-purple-200  justify-between items-center py-2 lg:py-0 px-4">
+            <header className="top-0 flex   justify-between items-center py-2 lg:py-0 px-4">
               <span className="lg:hidden">
                 <Logo />
               </span>
@@ -95,7 +104,13 @@ function DashboardLoyOut() {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu bg-purple-200 text-base-content min-h-full w-60 p-4 ">
+          <ul
+            className={`menu text-base-content min-h-full w-60 p-4 ${
+              theme === "dark"
+                ? "bg-darkBackground text-textLight"
+                : "bg-lightBackground text-textDark"
+            }`}
+          >
             <div className="flex flex-col space-y-8 mb-4">
               <div className="flex justify-center lg:justify-start">
                 <Logo />
@@ -111,10 +126,7 @@ function DashboardLoyOut() {
                     />
                   </div>
                   <h3>{user?.email}</h3>
-                  <button
-                    onClick={handleLogOut}
-                    className={"my-btn bg-purple-300"}
-                  >
+                  <button onClick={handleLogOut} className={"my-btn"}>
                     <span>
                       <IoMdLogIn />
                     </span>
@@ -123,18 +135,13 @@ function DashboardLoyOut() {
                 </div>
               ) : (
                 <div className="flex justify-center gap-5">
-                  <NavLink to="/sign-up" className={"my-btn bg-purple-300"}>
+                  <NavLink to="/sign-up" className={"my-btn"}>
                     <span>
                       <IoMdLogIn />
                     </span>
                     Sign Up
                   </NavLink>
-                  <NavLink
-                    to="/sign-in"
-                    className={
-                      "my-btn bg-primary-dark text-purple-100 hover:bg-purple-300 hover:text-black "
-                    }
-                  >
+                  <NavLink to="/sign-in" className={"my-btn "}>
                     <span>
                       <IoMdLogIn />
                     </span>
@@ -147,45 +154,90 @@ function DashboardLoyOut() {
 
             {(userFromDb?.role === "admin" ||
               userFromDb?.role === "seller") && (
-              <>
-                <li>
-                  <NavLink to="/dashboard">
-                    <span>
-                      <LuLayoutDashboard />
-                    </span>
-                    dashboard
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/">
-                    <span>
-                      <IoHome />
-                    </span>
-                    Back Home
-                  </NavLink>
-                </li>
-
+              <div className="space-y-1">
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    `navLink-style transition-all ${
+                      theme === "dark"
+                        ? "hover:bg-backgroundDarkOverlay text-textLight"
+                        : "hover:bg-backgroundLightOverlay"
+                    } ${
+                      isActive
+                        ? "bg-backgroundLightOverlay text-black"
+                        : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span className="mr-1">
+                    <LuLayoutDashboard />
+                  </span>
+                  Dashboard
+                </NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `navLink-style transition-all ${
+                      theme === "dark"
+                        ? "hover:bg-backgroundDarkOverlay text-textLight"
+                        : "hover:bg-backgroundLightOverlay"
+                    } ${
+                      isActive
+                        ? "bg-backgroundLightOverlay text-black"
+                        : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span className="mr-1">
+                    <IoHome />
+                  </span>
+                  Back Home
+                </NavLink>
                 <div className="divider"></div>
-              </>
+              </div>
             )}
 
             {userFromDb?.role === "admin" &&
               adminRoutes.map((list, i) => (
-                <li key={i} className="mb-1">
-                  <NavLink to={`/dashboard/${list.to}`}>
-                    <span>{list.icon}</span>
-                    {list.label}
-                  </NavLink>
-                </li>
+                <NavLink
+                  key={i}
+                  to={`/dashboard/${list.to}`}
+                  className={({ isActive }) =>
+                    `navLink-style transition-all ${
+                      theme === "dark"
+                        ? "hover:bg-backgroundDarkOverlay text-textLight"
+                        : "hover:bg-backgroundLightOverlay"
+                    } ${
+                      isActive
+                        ? "bg-backgroundLightOverlay text-black"
+                        : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span className="mr-1">{list.icon}</span>
+                  {list.label}
+                </NavLink>
               ))}
             {userFromDb?.role === "seller" &&
               sellerRoutes.map((list, i) => (
-                <li key={i} className="mb-1">
-                  <NavLink to={`/dashboard/${list.to}`}>
-                    <span>{list.icon}</span>
-                    {list.label}
-                  </NavLink>
-                </li>
+                <NavLink
+                  key={i}
+                  to={`/dashboard/${list.to}`}
+                  className={({ isActive }) =>
+                    `navLink-style transition-all ${
+                      theme === "dark"
+                        ? "hover:bg-backgroundDarkOverlay text-textLight"
+                        : "hover:bg-backgroundLightOverlay"
+                    } ${
+                      isActive
+                        ? "bg-backgroundLightOverlay text-black"
+                        : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span className="mr-2">{list.icon}</span>
+                  {list.label}
+                </NavLink>
               ))}
           </ul>
         </div>

@@ -5,6 +5,7 @@ import Loading from "../loading/Loading";
 import useUserFromDB from "../../hooks/useUserFromDB";
 import ProductCart from "../../components/ProductCart";
 import FilterSearch from "../../components/FilterSearch";
+import useTheme from "../../hooks/useTheme";
 
 function Products() {
   const [products, setProducts] = useState(null);
@@ -13,6 +14,7 @@ function Products() {
   const [sort, setSort] = useState("asc");
   const [category, setCategory] = useState("");
   const [latestData, setLatestData] = useState(false);
+  const { theme } = useTheme();
 
   const { userFromDb } = useUserFromDB();
   const token = localStorage.getItem("beautyLuxe");
@@ -66,7 +68,13 @@ function Products() {
     return <Loading />;
   }
   return (
-    <div className="min-h-screen bg-primary-light py-10 px-4 relative">
+    <div
+      className={`min-h-screen  py-10 px-4 relative ${
+        theme === "dark"
+          ? "bg-darkBackground text-textLight"
+          : "bg-lightBackground text-textDark"
+      }`}
+    >
       <div className="container mx-auto">
         <div>
           <div className="hidden lg:block">
@@ -99,22 +107,36 @@ function Products() {
                 />
               ))}
             </div>
-            <div className="flex justify-center my-8 w-full">
-              <div className="join">
+            <div className={`flex justify-center my-8 w-full`}>
+              <div className="join gap-1">
                 <button
                   disabled={page === 1}
                   onClick={() => handlePagination(page - 1)}
-                  className="join-item btn"
+                  className={`join-item px-3 py-2  ${
+                    theme === "dark"
+                      ? "bg-darkGray text-textLight"
+                      : "bg-lightGray text-textDark border"
+                  } rounded-md transition-all duration-100 font-semibold flex items-center justify-center gap-1 hover:bg-opacity-90 `}
                 >
                   prev
                 </button>
-                <button className="join-item btn">
+                <button
+                  className={`join-item px-3 py-2  ${
+                    theme === "dark"
+                      ? "bg-darkGray text-textLight"
+                      : "bg-lightGray text-textDark border"
+                  } rounded-md transition-all duration-100 font-semibold flex items-center justify-center gap-1 hover:bg-opacity-90 `}
+                >
                   page {page} of {totalPage}
                 </button>
                 <button
                   disabled={page === totalPage}
                   onClick={() => handlePagination(page + 1)}
-                  className="join-item btn"
+                  className={`join-item px-3 py-2  ${
+                    theme === "dark"
+                      ? "bg-darkGray text-textLight"
+                      : "bg-lightGray text-textDark border"
+                  } rounded-md transition-all duration-100 font-semibold flex items-center justify-center gap-1 hover:bg-opacity-90 `}
                 >
                   next
                 </button>

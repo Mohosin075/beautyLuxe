@@ -5,9 +5,15 @@
 .my-btn {
   @apply px-3 py-2  bg-primaryAccent text-white border-0 hover:text-white rounded-md transition-all duration-100 font-semibold flex items-center justify-center gap-1 hover:bg-opacity-90;
 }
+
 .navLink-style {
-  @apply flex items-center px-4 py-2 transition-all duration-75 rounded-md;
+  @apply flex items-center px-4 py-2 transition-all duration-75 rounded-md  border-transparent;
 }
+
+.input-style {
+  @apply px-2 py-1 w-full border-b-4 border-primaryAccent outline-none border-t border-l border-r rounded-md  text-lg 
+}
+
 .t-head {
   @apply px-4 py-2 border border-primary-light;
 }
