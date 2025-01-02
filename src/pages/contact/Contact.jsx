@@ -4,7 +4,6 @@ import useAuth from "./../../hooks/useAuth";
 import { useState } from "react";
 import { FiMail, FiMapPin, FiPhone } from "react-icons/fi";
 import useTheme from "../../hooks/useTheme";
-import Counter from "../../test/Counter";
 
 function Contact() {
   const { user } = useAuth();

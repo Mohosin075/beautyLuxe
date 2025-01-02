@@ -17,7 +17,6 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 function AuthProvider({ children }) {
-  const dispatch = useDispatch();
   const [fetchJWT, { data, isLoading, error }] = useJWTMutation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

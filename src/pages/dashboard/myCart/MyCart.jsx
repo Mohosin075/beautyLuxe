@@ -6,39 +6,46 @@ import SectionTitle from "../../../components/SectionTitle";
 import { IoTrashBin } from "react-icons/io5";
 import { toast } from "sonner";
 import useTheme from "../../../hooks/useTheme";
+import { useGetMyCartQuery } from "../../../redux/api/baseApi";
 
 function MyCart() {
-  const [carts, setCarts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [carts, setCarts] = useState([]);
   const [total, setTotal] = useState(0);
   const [cardStatus, setCardStatus] = useState(false);
 
   const { userFromDb } = useUserFromDB();
   const { theme } = useTheme();
 
-  // Fetch cart data
-  useEffect(() => {
-    const fetchCart = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const response = await axios.get(
-          `https://beauty-luxe-server.vercel.app/card/${userFromDb?.email}`
-        );
-        setCarts(response.data.items || []);
-        setTotal(response.data.totalPrice);
-      } catch (err) {
-        setError("Failed to load cart.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: carts, isLoading } = useGetMyCartQuery({
+    email: userFromDb?.email,
+  });
 
-    if (userFromDb) {
-      fetchCart();
-    }
-  }, [userFromDb, cardStatus]);
+  useEffect(() => {
+    setTotal(carts?.totalPrice);
+  }, [carts?.totalPrice]);
+
+  // Fetch cart data
+  // useEffect(() => {
+  //   const fetchCart = async () => {
+  //     setLoading(true);
+  //     setError("");
+  //     try {
+  //       const response = await axios.get(
+  //         `https://beauty-luxe-server.vercel.app/card/${userFromDb?.email}`
+  //       );
+  //       setCarts(response.data.items || []);
+  //       setTotal(response.data.totalPrice);
+  //     } catch (err) {
+  //       setError("Failed to load cart.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   if (userFromDb) {
+  //     fetchCart();
+  //   }
+  // }, [userFromDb, cardStatus]);
 
   // Update item quantity
   const onUpdateQuantity = async (productId, quantity) => {
@@ -78,20 +85,8 @@ function MyCart() {
     toast.info("This feature is't available right now");
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
-  }
-
-  // if (error) {
-  //   return <div className="text-red-500">{error}</div>;
-  // }
-
-  if (carts?.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h1 className="text-2xl font-bold">Your cart is empty!</h1>
-      </div>
-    );
   }
 
   return (
@@ -104,20 +99,20 @@ function MyCart() {
     >
       <SectionTitle title={"My Carts"} />
 
-      {carts.length === 0 ? (
+      {carts?.items?.length === 0 ? (
         <div className="text-center ">Your cart is empty!</div>
       ) : (
         <div>
           <div className="mt-4 flex justify-between items-center">
             <h2 className="text-2xl font-semibold">
-              Total: ${total.toFixed(2)}
+              Total: ${total?.toFixed(2)}
             </h2>
             <button className="my-btn" onClick={onCheckout}>
               Checkout
             </button>
           </div>
           <div className="mt-4">
-            {carts.map((item) => (
+            {carts?.items?.map((item) => (
               <div
                 key={item._id}
                 className="flex items-center justify-between mb-4 px-2  border rounded-lg shadow-md"
@@ -128,9 +123,7 @@ function MyCart() {
                   className="w-24 h-24 object-cover rounded-lg"
                 />
                 <div className="flex-1 ml-4">
-                  <h3 className="text-xl font-medium ">
-                    {item.name}
-                  </h3>
+                  <h3 className="text-xl font-medium ">{item.name}</h3>
                   <p className="">Price: ${item.price}</p>
                   <p className="">Sub Total: ${item.price * item.quantity}</p>
                   <div className="flex items-center mt-2">

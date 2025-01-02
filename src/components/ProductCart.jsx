@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import useUserFromDB from "../hooks/useUserFromDB";
 import useAuth from "../hooks/useAuth";
 import useTheme from "../hooks/useTheme";
+import { useAddWishListMutation } from "../redux/api/baseApi";
 
 /* eslint-disable react/prop-types */
 function ProductCart({
@@ -19,6 +20,8 @@ function ProductCart({
   const { userFromDb } = useUserFromDB();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const [addWishList, { data, isLoading }] = useAddWishListMutation();
 
   const handleDelete = (id) => {
     const token = localStorage.getItem("beautyLuxe");
@@ -51,31 +54,39 @@ function ProductCart({
       return navigate("/sign-in");
     }
 
-    await axios
-      .patch(`https://beauty-luxe-server.vercel.app/add-wishlist`, {
+    try {
+      const res = await axios.patch(`http://localhost:3000/add-wishlist`, {
         userEmail: userFromDb?.email,
         productId: product?._id,
-      })
-      .then((res) => {
-        if (res?.data?.modifiedCount === 1) {
-          navigate("/wishlist");
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Add successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          // if (setLatestData) {
-          //   setLatestData(!latestData);
-          // }
-        }
       });
+
+      // Check if the update was successful
+      if (res?.data?.modifiedCount === 1) {
+        navigate("/wishlist");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Added successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        console.error("Update failed or no changes made.");
+      }
+    } catch (error) {
+      console.error("An error occurred while adding to the wishlist:", error);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Failed to add to wishlist",
+        showConfirmButton: true,
+      });
+    }
   };
 
   const removeFromWishList = async () => {
     await axios
-      .patch(`https://beauty-luxe-server.vercel.app/remove-wishlist`, {
+      .patch(`http://localhost:3000/remove-wishlist`, {
         userEmail: userFromDb?.email,
         productId: product?._id,
       })
@@ -155,7 +166,10 @@ function ProductCart({
         </div>
         {isSeller ? (
           <div className="flex flex-col justify-between space-y-2">
-            <NavLink className='w-full' to={`/dashboard/update-product/${product._id}`}>
+            <NavLink
+              className="w-full"
+              to={`/dashboard/update-product/${product._id}`}
+            >
               <button className="my-btn w-full"> Edit Product</button>
             </NavLink>
             <button

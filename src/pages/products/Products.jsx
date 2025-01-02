@@ -1,36 +1,27 @@
 import { useEffect, useState } from "react";
-
 import SectionTitle from "../../components/SectionTitle";
 import Loading from "../loading/Loading";
-import useUserFromDB from "../../hooks/useUserFromDB";
 import ProductCart from "../../components/ProductCart";
 import FilterSearch from "../../components/FilterSearch";
 import useTheme from "../../hooks/useTheme";
 import { useGetProductQuery } from "../../redux/api/baseApi";
 
 function Products() {
-  // const [products, setProducts] = useState(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
   const [category, setCategory] = useState("");
   const [latestData, setLatestData] = useState(false);
-  const { theme } = useTheme();
-
-  const { userFromDb } = useUserFromDB();
-  const token = localStorage.getItem("beautyLuxe");
-
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
 
+  const { theme } = useTheme();
   const {
     data: products,
     isLoading,
-    error,
     refetch,
   } = useGetProductQuery({ title: search, sort, category, page });
 
   useEffect(() => {
-    console.log({ products });
     setTotalPage(Math.ceil(products?.total / Number(12)));
   }, [products]);
 
@@ -48,7 +39,6 @@ function Products() {
     if (newPage > 0 && newPage <= totalPage) {
       setPage(newPage);
       refetch();
-      // window.scroll({ top: 0, behavior: "smooth" });
     }
   };
 

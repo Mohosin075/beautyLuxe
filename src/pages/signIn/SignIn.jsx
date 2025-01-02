@@ -4,16 +4,22 @@ import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
-import useUserFromDB from "../../hooks/useUserFromDB";
 import useTheme from "../../hooks/useTheme";
+import useUserFromDB from "../../hooks/useUserFromDB";
+import { useEffect } from "react";
 
 function SignIn() {
   const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const { userFromDb } = useUserFromDB();
 
-  const { loadStatus, setLoadStatus } = useUserFromDB();
+  const { refetch } = useUserFromDB();
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    refetch();
+  }, [user, refetch]);
 
   const path = location?.state?.from?.pathname || "/";
 
@@ -27,7 +33,6 @@ function SignIn() {
     loginUser(data.email, data.password)
       .then((result) => {
         if (result.user) {
-          setLoadStatus(!loadStatus);
           toast.success("User Login Successfully!");
           navigate(path);
         }
@@ -61,10 +66,7 @@ function SignIn() {
                 <SocialLogin />
                 <p className="mt-5 text-center">
                   new to this site! please{" "}
-                  <NavLink
-                    to="/sign-up"
-                    className="underline font-semibold"
-                  >
+                  <NavLink to="/sign-up" className="underline font-semibold">
                     sign up
                   </NavLink>
                 </p>

@@ -6,14 +6,11 @@ import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import useTheme from "../hooks/useTheme";
+import Loading from "../pages/loading/Loading";
+import useUserFromDB from "../hooks/useUserFromDB";
 
 function DashboardLoyOut() {
-  const [userLoading, setUserLoading] = useState(false);
-  const [userFromDb, setUserFromDb] = useState(null);
-
   const { theme } = useTheme();
 
   const adminRoutes = [
@@ -38,34 +35,14 @@ function DashboardLoyOut() {
   ];
 
   const { user, logOut } = useAuth();
+  const { userFromDb, isLoading } = useUserFromDB();
 
-  // const { userFromDb ,loadStatus, setLoadStatus} = useUserFromDB();
-
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    const fetchUser = async () => {
-      setUserLoading(true);
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user?.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data) {
-            setUserFromDb(res.data);
-            setUserLoading(false);
-          }
-        });
-    };
-
-    // if (user && token) {
-    fetchUser();
-    // }
-  }, [user]);
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleLogOut = () => {
-    logOut().then((result) => {
-      // setLoadStatus(!loadStatus);
-    });
+    logOut().then(() => {});
   };
 
   return (

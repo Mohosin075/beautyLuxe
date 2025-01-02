@@ -3,37 +3,25 @@ import { IoHome } from "react-icons/io5";
 import { MdContactPhone } from "react-icons/md";
 import { FaAccusoft } from "react-icons/fa";
 import { AiOutlineProduct } from "react-icons/ai";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import Logo from "../Logo";
 import useAuth from "../../hooks/useAuth";
 import { NavLink } from "react-router";
 import { IoMdLogIn } from "react-icons/io";
 import useTheme from "../../hooks/useTheme";
 import ThemeToggler from "./../ThemeToggler";
+import Loading from "../../pages/loading/Loading";
+import useUserFromDB from "../../hooks/useUserFromDB";
 
 function Navbar() {
   const { user, logOut } = useAuth();
-  const [userFromDb, setUserFromDb] = useState(null);
+  // const [userFromDb, setUserFromDb] = useState(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { theme } = useTheme();
+  const {userFromDb, isLoading} = useUserFromDB()
 
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    if (user && token) {
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data) {
-            setUserFromDb(res.data);
-          }
-        });
-    }
-  }, [user]);
+  const { theme } = useTheme();
 
   const NavLinkList = [
     { label: "Home", to: "/", icon: <IoHome /> },
@@ -50,6 +38,10 @@ function Navbar() {
   const handleLogOut = () => {
     logOut().then(() => {});
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <nav

@@ -1,34 +1,12 @@
-import { useEffect, useState } from "react";
 import useAuth from "./useAuth";
-import axios from "axios";
+import { useGetUserQuery } from "../redux/api/baseApi";
 
 function useUserFromDB() {
   const { user } = useAuth();
-  const [userFromDb, setUserFromDb] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [loadStatus, setLoadStatus] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    const fetchUser = async () => {
-      setLoading(true);
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data) {
-            setLoading(false);
-            setUserFromDb(res.data);
-          }
-        });
-    };
-
-    if (user && token) {
-      fetchUser();
-    }
-  }, [user, loadStatus]);
-  return { userFromDb, loading, loadStatus, setLoadStatus };
+  const { data: userFromDb, isLoading, refetch } = useGetUserQuery({
+    email: user?.email,
+  });
+  return { userFromDb, isLoading , refetch};
 }
 
 export default useUserFromDB;

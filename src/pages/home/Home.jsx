@@ -1,4 +1,3 @@
-import Test from "../../Test";
 import Contact from "../contact/Contact";
 import CategoriesSection from "./CategoriesSection/CategoriesSection";
 import FAQs from "./FAQs/FAQs";

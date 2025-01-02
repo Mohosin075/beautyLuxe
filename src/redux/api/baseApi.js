@@ -3,7 +3,7 @@ import { toast } from "sonner";
 
 const token = localStorage.getItem("beautyLuxe");
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://beauty-luxe-server.vercel.app",
+  baseUrl: "http://localhost:3000",
   prepareHeaders: (headers) => {
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
@@ -51,7 +51,42 @@ export const baseApi = createApi({
         body: body,
       }),
     }),
+    addWishList: builder.mutation({
+      query: (body) => ({
+        url: `/add-wishlist`,
+        method: "PATCH",
+        body: body,
+      }),
+    }),
+    getUser: builder.query({
+      query: ({ email }) => {
+        return {
+          url: `/user/${email}`,
+        };
+      },
+    }),
+    getWishList: builder.query({
+      query: ({ email }) => {
+        return {
+          url: `/wishlist/${email}`,
+        };
+      },
+    }),
+    getMyCart: builder.query({
+      query: ({ email }) => {
+        return {
+          url: `/card/${email}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetProductQuery, useJWTMutation } = baseApi;
+export const {
+  useGetProductQuery,
+  useJWTMutation,
+  useAddWishListMutation,
+  useGetUserQuery,
+  useGetWishListQuery,
+  useGetMyCartQuery,
+} = baseApi;
