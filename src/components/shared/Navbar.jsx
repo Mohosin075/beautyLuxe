@@ -81,11 +81,21 @@ function Navbar() {
             <li key={idx} className="list-none">
               <NavLink
                 to={item.to}
-                className={`navLink-style ${
-                  theme === "dark"
-                    ? "hover:bg-backgroundDarkOverlay"
-                    : "hover:bg-backgroundLightOverlay"
-                }`}
+                className={({ isActive }) =>
+                  `navLink-style ${
+                    isActive && theme === "dark"
+                      ? "bg-backgroundDarkOverlay"
+                      : ""
+                  } ${
+                    isActive && theme === "light"
+                      ? "bg-backgroundLightOverlay"
+                      : ""
+                  } ${
+                    theme === "dark"
+                      ? "hover:bg-backgroundDarkOverlay"
+                      : "hover:bg-backgroundLightOverlay"
+                  }`
+                }
               >
                 {item.icon} <span className="ml-1">{item.label}</span>
               </NavLink>
@@ -97,11 +107,21 @@ function Navbar() {
               <li key={idx} className="list-none">
                 <NavLink
                   to={item.to}
-                  className={`navLink-style ${
-                    theme === "dark"
-                      ? "hover:bg-backgroundDarkOverlay"
-                      : "hover:bg-backgroundLightOverlay"
-                  }`}
+                  className={({ isActive }) =>
+                    `navLink-style ${
+                      isActive && theme === "dark"
+                        ? "bg-backgroundDarkOverlay"
+                        : ""
+                    } ${
+                      isActive && theme === "light"
+                        ? "bg-backgroundLightOverlay"
+                        : ""
+                    } ${
+                      theme === "dark"
+                        ? "hover:bg-backgroundDarkOverlay"
+                        : "hover:bg-backgroundLightOverlay"
+                    }`
+                  }
                 >
                   {item.icon} <span className="ml-1">{item.label}</span>
                 </NavLink>
@@ -109,15 +129,25 @@ function Navbar() {
             ))}
 
           {(userFromDb?.role === "admin" || userFromDb?.role === "seller") && (
-            <div>
+            <div className="">
               <NavLink
                 to="/dashboard"
                 onClick={() => setMenuOpen(false)}
-                className={`navLink-style ${
-                  theme === "dark"
-                    ? "hover:bg-backgroundDarkOverlay"
-                    : "hover:bg-backgroundLightOverlay"
-                }`}
+                className={({ isActive }) =>
+                  `navLink-style ${
+                    isActive && theme === "dark"
+                      ? "bg-backgroundDarkOverlay"
+                      : ""
+                  } ${
+                    isActive && theme === "light"
+                      ? "bg-backgroundLightOverlay"
+                      : ""
+                  } ${
+                    theme === "dark"
+                      ? "hover:bg-backgroundDarkOverlay"
+                      : "hover:bg-backgroundLightOverlay"
+                  }`
+                }
               >
                 <span>
                   <IoHome />

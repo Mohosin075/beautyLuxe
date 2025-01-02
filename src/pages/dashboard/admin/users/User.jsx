@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import UserTableRow from "../../../../components/UserTableRow";
+import useTheme from "../../../../hooks/useTheme";
 
 function User() {
   const [loading, setLoading] = useState(false);
@@ -25,17 +26,31 @@ function User() {
     fetchUser();
   }, [allUser]);
 
+  const { theme } = useTheme();
+
   return (
-    <div>
-      <div className="min-h-screen bg-primary-light flex items-center justify-center">
-        <div className="shadow-2xl p-6 rounded-md bg-primary-light max-w-7xl w-full min-h-screen">
+    <div
+      className={` ${
+        theme === "dark"
+          ? "bg-background text-textLight"
+          : "bg-background text-textDark"
+      }`}
+    >
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="shadow-2xl p-6 rounded-md  max-w-7xl w-full min-h-screen">
           <h1 className="text-2xl lg:text-4xl font-bold mb-6 text-center">
             All Users
           </h1>
           <div className="overflow-x-auto">
-            <table className="table-auto table table-xs table-pin-rows w-full border-collapse border border-primary-dark bg-white max-h-screen">
+            <table className="table-auto table table-xs table-pin-rows w-full border-collapse border border-primary-dark max-h-screen">
               <thead>
-                <tr className="bg-primary-dark text-white text-center">
+                <tr
+                  className={` text-center ${
+                    theme === "dark"
+                      ? "bg-primaryAccent text-textLight"
+                      : "bg-primaryAccent text-textLight"
+                  }`}
+                >
                   <th className="t-head">#</th>
                   <th className="t-head">Name</th>
                   <th className="t-head">Email</th>

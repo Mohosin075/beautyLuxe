@@ -157,11 +157,8 @@ function ProductCart({
         </div>
         {isSeller ? (
           <div className="flex flex-col justify-between space-y-2">
-            <NavLink
-              className="navLink-style"
-              to={`/dashboard/update-product/${product._id}`}
-            >
-              Edit Product
+            <NavLink className='w-full' to={`/dashboard/update-product/${product._id}`}>
+              <button className="my-btn w-full"> Edit Product</button>
             </NavLink>
             <button
               onClick={() => handleDelete(product._id)}
@@ -180,7 +177,7 @@ function ProductCart({
                     userFromDb?.role === "admin" ||
                     userFromDb?.role === "seller"
                   }
-                  className="mt-4 w-full py-2 rounded-md transition"
+                  className="my-btn"
                 >
                   remove from wishlist
                 </button>

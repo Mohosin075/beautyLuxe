@@ -7,12 +7,14 @@ import SectionTitle from "../../../components/SectionTitle";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import Loading from "../../loading/Loading";
+import useTheme from "../../../hooks/useTheme";
 
 function UpdateProduct() {
   const [loading, setLoading] = useState(true); // Set loading to true initially
   const [singleProduct, setSingleProduct] = useState(null);
   const { productId } = useParams();
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   const token = localStorage.getItem("beautyLuxe");
 
@@ -89,8 +91,8 @@ function UpdateProduct() {
   }
 
   return (
-    <div className="flex justify-around gap-7 bg-primary-light min-h-screen py-8">
-      <div className="p-10 rounded-md bg-primary-light w-9/12">
+    <div className="flex justify-around gap-7 bg-background min-h-screen py-8">
+      <div className="p-10 rounded-md  border-2 border-background w-9/12">
         <div>
           <SectionTitle
             title={"Update Product"}
@@ -104,7 +106,9 @@ function UpdateProduct() {
                   <label>Product Name: </label>
                   <input
                     {...register("name")}
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   />
                 </div>
                 <div className="text-start space-y-1 w-full">
@@ -112,7 +116,9 @@ function UpdateProduct() {
                   <input
                     type="number"
                     {...register("price")}
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   />
                 </div>
               </div>
@@ -122,7 +128,9 @@ function UpdateProduct() {
                   <input
                     type="number"
                     {...register("stock")}
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   />
                 </div>
                 <div className="text-start space-y-1 w-full">
@@ -130,7 +138,9 @@ function UpdateProduct() {
                   <input
                     type="text"
                     {...register("image")}
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   />
                 </div>
               </div>
@@ -141,14 +151,16 @@ function UpdateProduct() {
                     required: "Product description is required",
                   })}
                   placeholder="Enter product description"
-                  className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                  className={`input-style ${
+                    theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                  }`}
                 />
               </div>
 
               <div>
                 <button
                   type="submit"
-                  className="my-btn mt-8 text-center bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+                  className="my-btn mt-8 "
                 >
                   Update Product
                   <span>

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
 import useUserFromDB from "../../hooks/useUserFromDB";
+import useTheme from "../../hooks/useTheme";
 
 function SignIn() {
   const { loginUser } = useAuth();
@@ -39,10 +40,17 @@ function SignIn() {
         toast.error(err.message);
       });
   };
+  const { theme } = useTheme();
   return (
-    <div>
-      <div className="flex justify-around items-center gap-7 bg-primary-light min-h-screen py-8">
-        <div className="shadow-2xl p-10 rounded-md bg-primary-light max-w-9/12">
+    <div
+      className={`${
+        theme === "dark"
+          ? "bg-darkBackground text-textLight"
+          : "bg-lightBackground text-textDark border-2"
+      }`}
+    >
+      <div className="flex justify-around items-center gap-7  min-h-screen py-8">
+        <div className={`shadow-2xl p-10 rounded-md  max-w-9/12 bg-background`}>
           <div className="md:flex justify-center ">
             {/* left side here */}
             <div className=" w-full flex items-start justify-center  ">
@@ -59,7 +67,7 @@ function SignIn() {
                   new to this site! please{" "}
                   <NavLink
                     to="/sign-up"
-                    className="text-secondary-dark underline font-semibold"
+                    className="underline font-semibold"
                   >
                     sign up
                   </NavLink>
@@ -84,7 +92,9 @@ function SignIn() {
                     <input
                       type="text"
                       {...register("email", { required: true })}
-                      className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                      className={`input-style ${
+                        theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                      }`}
                       placeholder="Enter Your Email"
                     />
                     {errors.email && (
@@ -100,7 +110,9 @@ function SignIn() {
                       {...register("password", {
                         required: "password is required",
                       })}
-                      className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                      className={`input-style ${
+                        theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                      }`}
                       placeholder="Enter Password"
                     />
                     {errors.password && (
@@ -108,10 +120,7 @@ function SignIn() {
                     )}
                   </div>
                   <div>
-                    <button
-                      type="submit"
-                      className="my-btn mt-8 w-full text-center bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
-                    >
+                    <button type="submit" className="my-btn mt-6 w-full">
                       Sign In{" "}
                       <span>
                         <MdKeyboardTab />

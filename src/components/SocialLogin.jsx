@@ -59,7 +59,7 @@ function SocialLogin() {
       <button
         onClick={handleGoogleLogin}
         type="submit"
-        className="my-btn w-full text-center border-secondary-dark bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+        className="my-btn w-full"
       >
         Continue with Google
         <span>
@@ -71,7 +71,7 @@ function SocialLogin() {
           toast.info("This feature is't available right now! try with Google.")
         }
         type="submit"
-        className="my-btn w-full text-center bg-secondary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+        className="my-btn w-full"
       >
         Continue with Facebook
         <span>

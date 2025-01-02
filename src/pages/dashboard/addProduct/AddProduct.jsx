@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import Loading from "../../loading/Loading";
 import axios from "axios";
 import useUserFromDB from "./../../../hooks/useUserFromDB";
+import useTheme from "../../../hooks/useTheme";
 
 function AddProduct() {
   const [loading, setLoading] = useState(false);
@@ -62,13 +63,21 @@ function AddProduct() {
     });
   };
 
+  const { theme } = useTheme();
+
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <div className="flex justify-around gap-7 bg-primary-light min-h-screen py-8">
-      <div className="p-10 rounded-md bg-primary-light w-9/12">
+    <div
+      className={`flex justify-around gap-7  min-h-screen py-8 ${
+        theme === "dark"
+          ? "bg-background text-textLight"
+          : "bg-background text-textDark"
+      }`}
+    >
+      <div className="p-10 rounded-md  w-9/12">
         <div>
           <SectionTitle
             title={"Add Product"}
@@ -84,7 +93,9 @@ function AddProduct() {
                     required: "Product name is required",
                   })}
                   placeholder="Enter product name"
-                  className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                  className={`input-style ${
+                    theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                  }`}
                 />
                 {errors.name && (
                   <p className="text-red-500">{errors.name.message}</p>
@@ -97,7 +108,9 @@ function AddProduct() {
                     required: "Product description is required",
                   })}
                   placeholder="Enter product description"
-                  className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                  className={`input-style ${
+                    theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                  }`}
                 />
                 {errors.description && (
                   <p className="text-red-500">{errors.description.message}</p>
@@ -113,7 +126,9 @@ function AddProduct() {
                     })}
                     type="number"
                     placeholder="Enter product price"
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   />
                   {errors.price && (
                     <p className="text-red-500">{errors.price.message}</p>
@@ -128,7 +143,9 @@ function AddProduct() {
                     })}
                     type="number"
                     placeholder="Enter stock quantity"
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   />
                   {errors.stock && (
                     <p className="text-red-500">{errors.stock.message}</p>
@@ -141,7 +158,9 @@ function AddProduct() {
                   {...register("category", {
                     required: "Category is required",
                   })}
-                  className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                  className={`input-style ${
+                    theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                  }`}
                 >
                   <option value="">Select Category</option>
                   <option value="Skincare">Skincare</option>
@@ -161,7 +180,9 @@ function AddProduct() {
                   })}
                   type="text"
                   placeholder="Enter image URL"
-                  className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                  className={`input-style ${
+                    theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                  }`}
                 />
                 {errors.image && (
                   <p className="text-red-500">{errors.image.message}</p>
@@ -170,7 +191,7 @@ function AddProduct() {
               <div>
                 <button
                   type="submit"
-                  className="my-btn mt-8 text-center bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+                  className="my-btn mt-5"
                 >
                   Add Product
                   <span>

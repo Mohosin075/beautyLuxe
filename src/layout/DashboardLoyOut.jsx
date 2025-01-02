@@ -71,14 +71,14 @@ function DashboardLoyOut() {
   };
 
   return (
-    <div
-      className={`max-w-[1600px] mx-auto ${
-        theme === "dark"
-          ? "bg-darkBackground text-textLight"
-          : "bg-lightBackground text-textDark"
-      }`}
-    >
-      <div className="drawer lg:drawer-open">
+    <div>
+      <div
+        className={`drawer lg:drawer-open container mx-auto  max-w-[2500px] ${
+          theme === "dark"
+            ? "bg-darkBackground text-textLight"
+            : "bg-lightBackground text-textDark"
+        }`}
+      >
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <div>
@@ -88,7 +88,7 @@ function DashboardLoyOut() {
               </span>
               <label
                 htmlFor="my-drawer-2"
-                className="drawer-button lg:hidden text-xl text-white cursor-pointer"
+                className="drawer-button lg:hidden text-xl  cursor-pointer"
               >
                 <FaBarsStaggered />
               </label>
@@ -98,7 +98,7 @@ function DashboardLoyOut() {
             <Outlet />
           </div>
         </div>
-        <div className="drawer-side z-50">
+        <div className="drawer-side z-50 ">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"
