@@ -2,7 +2,7 @@ import SectionTitle from "../../components/SectionTitle";
 import useTheme from "../../hooks/useTheme";
 
 const About = () => {
-  const {theme} = useTheme()
+  const { theme } = useTheme();
   return (
     <div
       className={`${
@@ -24,10 +24,7 @@ const About = () => {
               </p>
               <p className="mt-5 text-center">
                 Discover our story and join the journey of self-care and beauty.{" "}
-                <a
-                  href="/products"
-                  className=" underline font-semibold"
-                >
+                <a href="/products" className=" underline font-semibold">
                   Browse Products
                 </a>
               </p>

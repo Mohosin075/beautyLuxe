@@ -15,8 +15,6 @@ function SocialLogin() {
   const handleGoogleLogin = () => {
     googleLogin()
       .then(async (result) => {
-        console.log(result.user);
-
         const user = result.user;
 
         const userData = {
@@ -49,8 +47,6 @@ function SocialLogin() {
       })
       .catch((err) => {
         toast.error(err.message);
-
-        console.log(err);
       });
   };
 

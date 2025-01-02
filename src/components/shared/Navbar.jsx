@@ -16,8 +16,6 @@ function Navbar() {
   const { user, logOut } = useAuth();
   const [userFromDb, setUserFromDb] = useState(null);
 
-  console.log({ userFromDb });
-
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { theme } = useTheme();
@@ -50,9 +48,7 @@ function Navbar() {
   ];
 
   const handleLogOut = () => {
-    logOut().then(() => {
-      console.log("Logged out");
-    });
+    logOut().then(() => {});
   };
 
   return (

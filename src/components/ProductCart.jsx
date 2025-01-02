@@ -59,7 +59,6 @@ function ProductCart({
       .then((res) => {
         if (res?.data?.modifiedCount === 1) {
           navigate("/wishlist");
-          console.log(res.data);
           Swal.fire({
             position: "top-end",
             icon: "success",
@@ -67,7 +66,6 @@ function ProductCart({
             showConfirmButton: false,
             timer: 1500,
           });
-          // console.log({ setLatestData, latestData });
           // if (setLatestData) {
           //   setLatestData(!latestData);
           // }

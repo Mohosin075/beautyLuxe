@@ -6,10 +6,10 @@ import useUserFromDB from "../../hooks/useUserFromDB";
 import ProductCart from "../../components/ProductCart";
 import FilterSearch from "../../components/FilterSearch";
 import useTheme from "../../hooks/useTheme";
+import { useGetProductQuery } from "../../redux/api/baseApi";
 
 function Products() {
-  const [products, setProducts] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [products, setProducts] = useState(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("asc");
   const [category, setCategory] = useState("");
@@ -22,30 +22,17 @@ function Products() {
   const [totalPage, setTotalPage] = useState(1);
   const [page, setPage] = useState(1);
 
+  const {
+    data: products,
+    isLoading,
+    error,
+    refetch,
+  } = useGetProductQuery({ title: search, sort, category, page });
+
   useEffect(() => {
-    // Fetch products data
-    setLoading(true);
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `https://beauty-luxe-server.vercel.app/products?page=${page}&title=${search}&category=${category}&sort=${sort}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        setTotalPage(Math.ceil(data?.total / Number(12)));
-        setProducts(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [userFromDb, token, page, category, search, sort]);
+    console.log({ products });
+    setTotalPage(Math.ceil(products?.total / Number(12)));
+  }, [products]);
 
   const onSearch = (text) => {
     setSearch(text);
@@ -60,11 +47,12 @@ function Products() {
   const handlePagination = (newPage) => {
     if (newPage > 0 && newPage <= totalPage) {
       setPage(newPage);
+      refetch();
       // window.scroll({ top: 0, behavior: "smooth" });
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
   return (

@@ -23,7 +23,6 @@ function SignUp() {
   } = useForm();
 
   const handleSignUp = (data) => {
-    console.log(data);
     createUser(data.email, data.password)
       .then(async (result) => {
         if (result.user) {
@@ -44,7 +43,6 @@ function SignUp() {
               }
             )
             .then((res) => {
-              console.log(res);
               if (res.data.insertedId) {
                 toast.success("User created Successfully!");
                 navigate(path);

@@ -24,8 +24,6 @@ function AddProduct() {
   } = useForm();
 
   const handleAddProduct = (data) => {
-    console.log(data);
-
     const productData = {
       ...data,
       sellerEmail: userFromDb?.email,
@@ -48,7 +46,6 @@ function AddProduct() {
           })
           .then((res) => {
             if (res.data.insertedId) {
-              console.log(res);
               toast.success("Product added successfully!");
               setLoading(false);
               reset();

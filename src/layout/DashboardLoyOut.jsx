@@ -50,7 +50,6 @@ function DashboardLoyOut() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          console.log(res);
           if (res.data) {
             setUserFromDb(res.data);
             setUserLoading(false);
@@ -66,7 +65,6 @@ function DashboardLoyOut() {
   const handleLogOut = () => {
     logOut().then((result) => {
       // setLoadStatus(!loadStatus);
-      console.log(result);
     });
   };
 

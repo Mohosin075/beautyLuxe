@@ -12,8 +12,6 @@ function MyProducts() {
   const { userFromDb } = useUserFromDB();
   const token = localStorage.getItem("beautyLuxe");
 
-  console.log(change);
-
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -32,7 +30,7 @@ function MyProducts() {
           }
         })
         .catch((err) => {
-          console.log(err);
+
         });
     };
 

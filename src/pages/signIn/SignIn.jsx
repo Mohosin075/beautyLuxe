@@ -17,9 +17,6 @@ function SignIn() {
 
   const path = location?.state?.from?.pathname || "/";
 
-  console.log(location);
-  console.log(path);
-
   const {
     register,
     handleSubmit,
@@ -34,7 +31,6 @@ function SignIn() {
           toast.success("User Login Successfully!");
           navigate(path);
         }
-        console.log(result.user);
       })
       .catch((err) => {
         toast.error(err.message);

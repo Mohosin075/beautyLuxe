@@ -54,7 +54,6 @@ function UpdateProduct() {
   }, [singleProduct, setValue]);
 
   const handleUpdate = (data) => {
-    console.log(data);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",

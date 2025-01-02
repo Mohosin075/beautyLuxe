@@ -42,7 +42,6 @@ function MyCart() {
 
   // Update item quantity
   const onUpdateQuantity = async (productId, quantity) => {
-    console.log({ productId, quantity });
     if (quantity < 1) return;
     setLoading(true);
     try {
@@ -61,7 +60,6 @@ function MyCart() {
 
   // Remove item
   const onRemoveItem = async (productId) => {
-    console.log(productId);
     setLoading(true);
     try {
       await axios.delete(
@@ -75,8 +73,6 @@ function MyCart() {
       setLoading(false);
     }
   };
-
-  console.log(carts);
 
   const onCheckout = () => {
     toast.info("This feature is't available right now");

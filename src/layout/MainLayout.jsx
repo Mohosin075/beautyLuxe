@@ -78,7 +78,6 @@ function MainLayout() {
   const handleLogOut = () => {
     logOut().then((result) => {
       // setLoadStatus(!loadStatus);
-      console.log(result);
     });
   };
 
