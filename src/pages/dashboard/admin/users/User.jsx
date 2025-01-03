@@ -1,32 +1,16 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import UserTableRow from "../../../../components/UserTableRow";
 import useTheme from "../../../../hooks/useTheme";
+import { useGetAllUserQuery } from "../../../../redux/api/baseApi";
+import Loading from "../../../loading/Loading";
 
 function User() {
-  const [loading, setLoading] = useState(false);
-  const [allUser, setAllUser] = useState([]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    const fetchUser = async () => {
-      setLoading(true);
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/users`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data) {
-            setLoading(false);
-            setAllUser(res.data);
-          }
-        });
-    };
-
-    fetchUser();
-  }, [allUser]);
+  const { data: allUser, isLoading } = useGetAllUserQuery();
 
   const { theme } = useTheme();
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div
@@ -62,13 +46,13 @@ function User() {
                 </tr>
               </thead>
               <tbody>
-                {allUser.length > 0 &&
-                  allUser.map((user, i) => (
+                {allUser?.length > 0 &&
+                  allUser?.map((user, i) => (
                     <UserTableRow user={user} key={i} i={i} />
                   ))}
               </tbody>
             </table>
-            {allUser.length === 0 && (
+            {allUser?.length === 0 && (
               <div className="text-center my-5 text-xl md:text-3xl">
                 No User found
               </div>

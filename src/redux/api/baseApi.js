@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { toast } from "sonner";
 
 const token = localStorage.getItem("beautyLuxe");
 const baseQuery = fetchBaseQuery({
@@ -17,10 +16,10 @@ const baseQueryWithJWT = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 404) {
-    toast.error(result.error.data.message);
+    // toast.error(result.error.data.message);
   }
   if (result?.error?.status === 403) {
-    toast.error(result.error.data.message);
+    // toast.error(result.error.data.message);
   }
 
   result = await baseQuery(args, api, extraOptions);
@@ -45,11 +44,20 @@ export const baseApi = createApi({
       },
     }),
     JWT: builder.mutation({
-      query: (body) => ({
+      query: ({ body }) => ({
         url: `/jwt`,
         method: "POST",
         body: body,
       }),
+    }),
+    createUser: builder.mutation({
+      query: ({ userData, email }) => {
+        return {
+          url: `/user/${email}`,
+          method: "POST",
+          body: { userData },
+        };
+      },
     }),
     addWishList: builder.mutation({
       query: (body) => ({
@@ -58,10 +66,76 @@ export const baseApi = createApi({
         body: body,
       }),
     }),
+    addToCard: builder.mutation({
+      query: (body) => ({
+        url: `/card`,
+        method: "POST",
+        body: body,
+      }),
+    }),
+    addProduct: builder.mutation({
+      query: (body) => ({
+        url: `/product`,
+        method: "POST",
+        body: body,
+      }),
+    }),
+    removeFromMyCart: builder.mutation({
+      query: ({ email, productId }) => {
+        return {
+          url: `/card/${email}/${productId}`,
+          method: "DELETE",
+        };
+      },
+    }),
+    deleteMyProduct: builder.mutation({
+      query: ({ productId }) => {
+        return {
+          url: `/product/${productId}`,
+          method: "DELETE",
+        };
+      },
+    }),
+    updateMyProduct: builder.mutation({
+      query: ({ body, productId }) => {
+        console.log(body);
+        return {
+          url: `/product/${productId}`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+    }),
+    updateQuantity: builder.mutation({
+      query: (body) => {
+        return {
+          url: `/card`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+    }),
+    removeFromWishlist: builder.mutation({
+      query: (body) => {
+        return {
+          url: `/remove-wishlist`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+    }),
+
     getUser: builder.query({
       query: ({ email }) => {
         return {
           url: `/user/${email}`,
+        };
+      },
+    }),
+    getAllUser: builder.query({
+      query: () => {
+        return {
+          url: `/users`,
         };
       },
     }),
@@ -79,6 +153,20 @@ export const baseApi = createApi({
         };
       },
     }),
+    getMyProduct: builder.query({
+      query: ({ email }) => {
+        return {
+          url: `/products/${email}`,
+        };
+      },
+    }),
+    getSingleProduct: builder.query({
+      query: ({ productId }) => {
+        return {
+          url: `/product/${productId}`,
+        };
+      },
+    }),
   }),
 });
 
@@ -89,4 +177,15 @@ export const {
   useGetUserQuery,
   useGetWishListQuery,
   useGetMyCartQuery,
+  useRemoveFromMyCartMutation,
+  useUpdateQuantityMutation,
+  useAddToCardMutation,
+  useRemoveFromWishlistMutation,
+  useGetMyProductQuery,
+  useDeleteMyProductMutation,
+  useUpdateMyProductMutation,
+  useGetSingleProductQuery,
+  useCreateUserMutation,
+  useGetAllUserQuery,
+  useAddProductMutation,
 } = baseApi;

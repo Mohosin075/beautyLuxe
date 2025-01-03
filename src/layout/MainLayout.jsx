@@ -9,35 +9,11 @@ import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
 import Loading from "../pages/loading/Loading";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import useUserFromDB from "../hooks/useUserFromDB";
 
 function MainLayout() {
-  const { user, logOut, loading } = useAuth();
-  const [userLoading, setUserLoading] = useState(false);
-  const [userFromDb, setUserFromDb] = useState(null);
-  // const { userFromDb, loadStatus, setLoadStatus } = useUserFromDB();
-
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    const fetchUser = async () => {
-      setUserLoading(true);
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data) {
-            setUserLoading(false);
-            setUserFromDb(res.data);
-          }
-        });
-    };
-
-    if (user && token) {
-      fetchUser();
-    }
-  }, [user, userFromDb?.role]);
+  const { user, logOut } = useAuth();
+  const { userFromDb, isLoading } = useUserFromDB();
 
   const NavLinkList = [
     {
@@ -76,12 +52,10 @@ function MainLayout() {
   ];
 
   const handleLogOut = () => {
-    logOut().then((result) => {
-      // setLoadStatus(!loadStatus);
-    });
+    logOut().then(() => {});
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 

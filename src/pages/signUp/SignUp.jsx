@@ -4,8 +4,8 @@ import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
-import axios from "axios";
 import useTheme from "../../hooks/useTheme";
+import { useCreateUserMutation } from "../../redux/api/baseApi";
 
 function SignUp() {
   const { createUser } = useAuth();
@@ -15,6 +15,8 @@ function SignUp() {
 
   const path = location?.state?.from?.pathname || "/";
 
+  const [userCreate] = useCreateUserMutation();
+
   const {
     register,
     handleSubmit,
@@ -23,36 +25,30 @@ function SignUp() {
   } = useForm();
 
   const handleSignUp = (data) => {
-    createUser(data.email, data.password)
-      .then(async (result) => {
-        if (result.user) {
-          const userData = {
-            name: data.fullName,
-            email: data.email,
-            photoURL: "",
-            role: data.role ? data.role : "buyer",
-            status: data.role === "buyer" ? "approved" : "pending",
-            wishlist: [],
-          };
+    try {
+      createUser(data.email, data.password)
+        .then(async (result) => {
+          if (result.user) {
+            const userData = {
+              name: data.fullName,
+              email: data.email,
+              photoURL: "",
+              role: data.role ? data.role : "buyer",
+              status: data.role === "buyer" ? "approved" : "pending",
+              wishlist: [],
+            };
 
-          await axios
-            .post(
-              `https://beauty-luxe-server.vercel.app/user/${result.user.email}`,
-              {
-                userData,
-              }
-            )
-            .then((res) => {
-              if (res.data.insertedId) {
-                toast.success("User created Successfully!");
-                navigate(path);
-              }
-            });
-        }
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+            await userCreate({ email: result.user.email, userData: userData });
+            toast.success("User Login Successfully!");
+            navigate(path);
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const { theme } = useTheme();

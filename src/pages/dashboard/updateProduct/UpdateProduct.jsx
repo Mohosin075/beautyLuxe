@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
@@ -8,39 +7,21 @@ import Swal from "sweetalert2";
 import { toast } from "sonner";
 import Loading from "../../loading/Loading";
 import useTheme from "../../../hooks/useTheme";
+import {
+  useGetSingleProductQuery,
+  useUpdateMyProductMutation,
+} from "../../../redux/api/baseApi";
 
 function UpdateProduct() {
-  const [loading, setLoading] = useState(true); // Set loading to true initially
-  const [singleProduct, setSingleProduct] = useState(null);
   const { productId } = useParams();
   const navigate = useNavigate();
   const { theme } = useTheme();
-
-  const token = localStorage.getItem("beautyLuxe");
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await axios.get(
-          `https://beauty-luxe-server.vercel.app/product/${productId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setSingleProduct(res.data);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        toast.error("Error fetching product details!");
-      }
-    };
-
-    if (token) {
-      fetchProduct();
-    }
-  }, [productId, token]);
-
+  const { data: singleProduct, isLoading } = useGetSingleProductQuery({
+    productId,
+  });
   const { register, handleSubmit, setValue } = useForm();
+
+  const [updateMyProduct] = useUpdateMyProductMutation();
 
   // Set form values once the product is loaded
   useEffect(() => {
@@ -64,28 +45,18 @@ function UpdateProduct() {
       confirmButtonText: "Yes, Update!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await axios
-          .patch(
-            `https://beauty-luxe-server.vercel.app/product/${singleProduct?._id}`,
-            data,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-            if (res) {
-              toast.success("Product updated successfully!");
-              navigate("/dashboard/my-product");
-            }
-          })
-          .catch(() => {
-            toast.error("Failed to update product!");
-          });
+        try {
+          await updateMyProduct({ productId, body: { ...data } });
+          toast.success("update successfully!");
+          navigate("/dashboard/my-product");
+        } catch (error) {
+          console.log(error);
+        }
       }
     });
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -157,10 +128,7 @@ function UpdateProduct() {
               </div>
 
               <div>
-                <button
-                  type="submit"
-                  className="my-btn mt-8 "
-                >
+                <button type="submit" className="my-btn mt-8 ">
                   Update Product
                   <span>
                     <MdKeyboardTab />

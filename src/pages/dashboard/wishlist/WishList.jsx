@@ -7,9 +7,7 @@ import useUserFromDB from "../../../hooks/useUserFromDB";
 
 function Wishlist() {
   const { userFromDb } = useUserFromDB();
-  const { data: wishlist, isLoading } = useGetWishListQuery({email : userFromDb?.email});
-
-  console.log(wishlist);
+  const { data: wishlist, isLoading, refetch } = useGetWishListQuery({email : userFromDb?.email});
 
   if (isLoading) {
     return <Loading />;

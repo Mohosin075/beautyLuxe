@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
 import { useNavigate } from "react-router";
@@ -6,20 +5,20 @@ import SectionTitle from "../../../components/SectionTitle";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import Loading from "../../loading/Loading";
-import axios from "axios";
+
 import useUserFromDB from "./../../../hooks/useUserFromDB";
 import useTheme from "../../../hooks/useTheme";
+import { useAddProductMutation } from "../../../redux/api/baseApi";
 
 function AddProduct() {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem("beautyLuxe");
   const { userFromDb } = useUserFromDB();
+
+  const [addProduct, { isLoading }] = useAddProductMutation();
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -39,30 +38,20 @@ function AddProduct() {
       confirmButtonText: "Yes, Add!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        setLoading(true);
-        await axios
-          .post("https://beauty-luxe-server.vercel.app/product", productData, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res) => {
-            if (res.data.insertedId) {
-              toast.success("Product added successfully!");
-              setLoading(false);
-              reset();
-              navigate("/dashboard/my-product");
-            }
-          })
-          .catch(() => {
-            toast.error("Failed to add product!");
-            setLoading(false);
-          });
+        try {
+          await addProduct(productData);
+          toast.success("Product added successfully!");
+          navigate("/dashboard/my-product");
+        } catch (error) {
+          console.log(error);
+        }
       }
     });
   };
 
   const { theme } = useTheme();
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -186,10 +175,7 @@ function AddProduct() {
                 )}
               </div>
               <div>
-                <button
-                  type="submit"
-                  className="my-btn mt-5"
-                >
+                <button type="submit" className="my-btn mt-5">
                   Add Product
                   <span>
                     <MdKeyboardTab />

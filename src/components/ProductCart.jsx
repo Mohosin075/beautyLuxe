@@ -1,52 +1,57 @@
-import axios from "axios";
 import { NavLink, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import useUserFromDB from "../hooks/useUserFromDB";
 import useAuth from "../hooks/useAuth";
 import useTheme from "../hooks/useTheme";
-import { useAddWishListMutation } from "../redux/api/baseApi";
+import {
+  useAddToCardMutation,
+  useAddWishListMutation,
+  useDeleteMyProductMutation,
+  useGetMyCartQuery,
+  useGetMyProductQuery,
+  useGetWishListQuery,
+  useRemoveFromWishlistMutation,
+} from "../redux/api/baseApi";
 
 /* eslint-disable react/prop-types */
-function ProductCart({
-  product,
-  isSeller,
-  change,
-  setChange,
-  wishlist,
-  latestData,
-  setLatestData,
-}) {
+function ProductCart({ product, isSeller, wishlist }) {
   const { userFromDb } = useUserFromDB();
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [addWishList, { data, isLoading }] = useAddWishListMutation();
+  const [addWishList] = useAddWishListMutation();
+  const { refetch } = useGetMyCartQuery({ email: userFromDb?.email });
+  const [addToCard] = useAddToCardMutation();
+  const [removeWishList] = useRemoveFromWishlistMutation();
+  const { refetch: wishlistRefetch } = useGetWishListQuery({
+    email: userFromDb?.email,
+  });
+  const { refetch: myProductRefetch } = useGetMyProductQuery({
+    email: userFromDb?.email,
+  });
+  const [deleteProduct] = useDeleteMyProductMutation();
 
-  const handleDelete = (id) => {
-    const token = localStorage.getItem("beautyLuxe");
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`https://beauty-luxe-server.vercel.app/product/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res) => {
-            if (res.data.deletedCount === 1) {
-              setChange(!change);
-              toast.success("deleted successfully!");
-            }
-          });
-      }
-    });
+  const handleDelete = async (id) => {
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await deleteProduct({ productId: id });
+          myProductRefetch();
+          toast("deleted!");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleWishlist = async () => {
@@ -55,55 +60,41 @@ function ProductCart({
     }
 
     try {
-      const res = await axios.patch(`http://localhost:3000/add-wishlist`, {
+      await addWishList({
         userEmail: userFromDb?.email,
         productId: product?._id,
       });
-
-      // Check if the update was successful
-      if (res?.data?.modifiedCount === 1) {
-        navigate("/wishlist");
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Added successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } else {
-        console.error("Update failed or no changes made.");
-      }
-    } catch (error) {
-      console.error("An error occurred while adding to the wishlist:", error);
+      refetch();
+      navigate("/wishlist");
       Swal.fire({
         position: "top-end",
-        icon: "error",
-        title: "Failed to add to wishlist",
-        showConfirmButton: true,
+        icon: "success",
+        title: "Added successfully",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const removeFromWishList = async () => {
-    await axios
-      .patch(`http://localhost:3000/remove-wishlist`, {
+    try {
+      await removeWishList({
         userEmail: userFromDb?.email,
         productId: product?._id,
-      })
-      .then((res) => {
-        if (res?.data?.modifiedCount === 1) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Remove successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          if (setLatestData) {
-            setLatestData(!latestData);
-          }
-        }
       });
+      wishlistRefetch();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Remove successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleAddToCard = async () => {
@@ -111,24 +102,27 @@ function ProductCart({
       return navigate("/sign-in");
     }
 
-    await axios
-      .post(`https://beauty-luxe-server.vercel.app/card`, {
+    try {
+      const res = await addToCard({
         email: userFromDb?.email,
         productId: product?._id,
         quantity: 1,
-      })
-      .then((res) => {
-        if (res?.data?.insertedId === 1) {
-          navigate("/my-cart");
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Added successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
       });
+
+      if (res?.data?.insertedId === 1) {
+        refetch();
+        navigate("/my-cart");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Added successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const { theme } = useTheme();
