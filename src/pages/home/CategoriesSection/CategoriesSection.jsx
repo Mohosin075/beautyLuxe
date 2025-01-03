@@ -1,43 +1,17 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Loading from "../../loading/Loading";
 import SectionTitle from "../../../components/SectionTitle";
 import { NavLink } from "react-router";
 import useTheme from "../../../hooks/useTheme";
+import { useGetProductQuery } from "../../../redux/api/baseApi";
 
 function CategoriesSection() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   const { theme } = useTheme();
-
-  // Fetch categories from the /products endpoint
-  useEffect(() => {
-    const fetchCategories = async () => {
-      setLoading(true);
-      setError("");
-
-      try {
-        const response = await axios.get(
-          "https://beauty-luxe-server.vercel.app/products"
-        );
-        setCategories(response.data.categories || []);
-      } catch (err) {
-        setError("Failed to load categories.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  if (loading) {
+  const { data, isLoading } = useGetProductQuery({});
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (categories.length === 0) {
+  if (data?.categories?.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <h1 className="text-2xl font-bold">No categories available!</h1>
@@ -56,7 +30,7 @@ function CategoriesSection() {
       <div className="container mx-auto">
         <SectionTitle title="Categories" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
-          {categories.map((category, index) => (
+          {data?.categories.map((category, index) => (
             <NavLink
               to={`/categories/${category}`}
               key={index}

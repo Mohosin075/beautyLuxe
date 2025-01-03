@@ -5,6 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { NavLink } from "react-router";
+import useTheme from "../hooks/useTheme";
 
 function UserTableRow({ user, i }) {
   const token = localStorage.getItem("beautyLuxe");
@@ -32,10 +33,16 @@ function UserTableRow({ user, i }) {
     });
   };
 
+  const {theme} = useTheme()
+
   return (
     <tr
       key={user?.email}
-      className="hover:bg-primary-light text-secondary-dark transition-all"
+      className={` ${
+        theme === "dark"
+          ? "bg-background text-textLight"
+          : "bg-background text-textDark"
+      }`}
     >
       <td className="t-d">{i + 1}</td>
       <td className="t-d">{user?.email}</td>
@@ -49,7 +56,7 @@ function UserTableRow({ user, i }) {
       <td className="t-d">
         <NavLink
           to={`/dashboard/update-user/${user.email}`}
-          className="my-btn w-fit cursor-pointer border-secondary-light bg-secondary-dark text-white hover:bg-sky-800 hover:text-white"
+          className="my-btn w-fit "
         >
           <FaEdit />
         </NavLink>
@@ -57,7 +64,7 @@ function UserTableRow({ user, i }) {
       <td className="t-d">
         <button
           onClick={() => handleDelete(user._id)}
-          className="my-btn bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+          className="my-btn"
         >
           <IoTrashBin />
         </button>

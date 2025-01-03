@@ -1,37 +1,13 @@
 import Loading from "../../loading/Loading";
-import { useEffect, useState } from "react";
 import SectionTitle from "../../../components/SectionTitle";
 import ProductCart from "../../../components/ProductCart";
 import { NavLink } from "react-router";
+import { useGetProductQuery } from "../../../redux/api/baseApi";
 
 function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { data: products, isLoading } = useGetProductQuery({});
 
-  useEffect(() => {
-    // Fetch products data
-    setLoading(true);
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `https://beauty-luxe-server.vercel.app/products`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        // console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -52,7 +28,7 @@ function FeaturedProducts() {
           </div> */}
         </div>
 
-        {products.length === 0 ? (
+        {products?.length === 0 ? (
           <div>
             <h3 className="text-3xl text-center">Not Product here</h3>
           </div>

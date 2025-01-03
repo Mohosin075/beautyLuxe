@@ -6,14 +6,11 @@ import { IoMdLogIn } from "react-icons/io";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
 import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import useTheme from "../hooks/useTheme";
+import Loading from "../pages/loading/Loading";
+import useUserFromDB from "../hooks/useUserFromDB";
 
 function DashboardLoyOut() {
-  const [userLoading, setUserLoading] = useState(false);
-  const [userFromDb, setUserFromDb] = useState(null);
-
   const { theme } = useTheme();
 
   const adminRoutes = [
@@ -38,47 +35,25 @@ function DashboardLoyOut() {
   ];
 
   const { user, logOut } = useAuth();
+  const { userFromDb, isLoading } = useUserFromDB();
 
-  // const { userFromDb ,loadStatus, setLoadStatus} = useUserFromDB();
-
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    const fetchUser = async () => {
-      setUserLoading(true);
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user?.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.data) {
-            setUserFromDb(res.data);
-            setUserLoading(false);
-          }
-        });
-    };
-
-    // if (user && token) {
-    fetchUser();
-    // }
-  }, [user]);
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleLogOut = () => {
-    logOut().then((result) => {
-      // setLoadStatus(!loadStatus);
-      console.log(result);
-    });
+    logOut().then(() => {});
   };
 
   return (
-    <div
-      className={`max-w-[1600px] mx-auto ${
-        theme === "dark"
-          ? "bg-darkBackground text-textLight"
-          : "bg-lightBackground text-textDark"
-      }`}
-    >
-      <div className="drawer lg:drawer-open">
+    <div>
+      <div
+        className={`drawer lg:drawer-open container mx-auto  max-w-[2500px] ${
+          theme === "dark"
+            ? "bg-darkBackground text-textLight"
+            : "bg-lightBackground text-textDark"
+        }`}
+      >
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <div>
@@ -88,7 +63,7 @@ function DashboardLoyOut() {
               </span>
               <label
                 htmlFor="my-drawer-2"
-                className="drawer-button lg:hidden text-xl text-white cursor-pointer"
+                className="drawer-button lg:hidden text-xl  cursor-pointer"
               >
                 <FaBarsStaggered />
               </label>
@@ -98,7 +73,7 @@ function DashboardLoyOut() {
             <Outlet />
           </div>
         </div>
-        <div className="drawer-side z-50">
+        <div className="drawer-side z-50 ">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"

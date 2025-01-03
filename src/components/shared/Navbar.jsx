@@ -3,39 +3,25 @@ import { IoHome } from "react-icons/io5";
 import { MdContactPhone } from "react-icons/md";
 import { FaAccusoft } from "react-icons/fa";
 import { AiOutlineProduct } from "react-icons/ai";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import Logo from "../Logo";
 import useAuth from "../../hooks/useAuth";
 import { NavLink } from "react-router";
 import { IoMdLogIn } from "react-icons/io";
 import useTheme from "../../hooks/useTheme";
 import ThemeToggler from "./../ThemeToggler";
+import Loading from "../../pages/loading/Loading";
+import useUserFromDB from "../../hooks/useUserFromDB";
 
 function Navbar() {
   const { user, logOut } = useAuth();
-  const [userFromDb, setUserFromDb] = useState(null);
-
-  console.log({ userFromDb });
+  // const [userFromDb, setUserFromDb] = useState(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { theme } = useTheme();
+  const {userFromDb, isLoading} = useUserFromDB()
 
-  useEffect(() => {
-    const token = localStorage.getItem("beautyLuxe");
-    if (user && token) {
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${user.email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.data) {
-            setUserFromDb(res.data);
-          }
-        });
-    }
-  }, [user]);
+  const { theme } = useTheme();
 
   const NavLinkList = [
     { label: "Home", to: "/", icon: <IoHome /> },
@@ -50,10 +36,12 @@ function Navbar() {
   ];
 
   const handleLogOut = () => {
-    logOut().then(() => {
-      console.log("Logged out");
-    });
+    logOut().then(() => {});
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <nav
@@ -81,11 +69,21 @@ function Navbar() {
             <li key={idx} className="list-none">
               <NavLink
                 to={item.to}
-                className={`navLink-style ${
-                  theme === "dark"
-                    ? "hover:bg-backgroundDarkOverlay"
-                    : "hover:bg-backgroundLightOverlay"
-                }`}
+                className={({ isActive }) =>
+                  `navLink-style ${
+                    isActive && theme === "dark"
+                      ? "bg-backgroundDarkOverlay"
+                      : ""
+                  } ${
+                    isActive && theme === "light"
+                      ? "bg-backgroundLightOverlay"
+                      : ""
+                  } ${
+                    theme === "dark"
+                      ? "hover:bg-backgroundDarkOverlay"
+                      : "hover:bg-backgroundLightOverlay"
+                  }`
+                }
               >
                 {item.icon} <span className="ml-1">{item.label}</span>
               </NavLink>
@@ -97,11 +95,21 @@ function Navbar() {
               <li key={idx} className="list-none">
                 <NavLink
                   to={item.to}
-                  className={`navLink-style ${
-                    theme === "dark"
-                      ? "hover:bg-backgroundDarkOverlay"
-                      : "hover:bg-backgroundLightOverlay"
-                  }`}
+                  className={({ isActive }) =>
+                    `navLink-style ${
+                      isActive && theme === "dark"
+                        ? "bg-backgroundDarkOverlay"
+                        : ""
+                    } ${
+                      isActive && theme === "light"
+                        ? "bg-backgroundLightOverlay"
+                        : ""
+                    } ${
+                      theme === "dark"
+                        ? "hover:bg-backgroundDarkOverlay"
+                        : "hover:bg-backgroundLightOverlay"
+                    }`
+                  }
                 >
                   {item.icon} <span className="ml-1">{item.label}</span>
                 </NavLink>
@@ -109,15 +117,25 @@ function Navbar() {
             ))}
 
           {(userFromDb?.role === "admin" || userFromDb?.role === "seller") && (
-            <div>
+            <div className="">
               <NavLink
                 to="/dashboard"
                 onClick={() => setMenuOpen(false)}
-                className={`navLink-style ${
-                  theme === "dark"
-                    ? "hover:bg-backgroundDarkOverlay"
-                    : "hover:bg-backgroundLightOverlay"
-                }`}
+                className={({ isActive }) =>
+                  `navLink-style ${
+                    isActive && theme === "dark"
+                      ? "bg-backgroundDarkOverlay"
+                      : ""
+                  } ${
+                    isActive && theme === "light"
+                      ? "bg-backgroundLightOverlay"
+                      : ""
+                  } ${
+                    theme === "dark"
+                      ? "hover:bg-backgroundDarkOverlay"
+                      : "hover:bg-backgroundLightOverlay"
+                  }`
+                }
               >
                 <span>
                   <IoHome />

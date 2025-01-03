@@ -9,13 +9,15 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { app } from "../src/firebase/firebase.config";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useJWTMutation } from "../src/redux/api/baseApi";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 function AuthProvider({ children }) {
+  const [fetchJWT, { data, isLoading, error }] = useJWTMutation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,16 +46,10 @@ function AuthProvider({ children }) {
       // setLoading(false)
 
       if (currentUser && currentUser?.email) {
-        axios
-          .post("https://beauty-luxe-server.vercel.app/jwt", {
-            email: currentUser.email,
-          })
-          .then((data) => {
-            if (data?.data?.token) {
-              localStorage.setItem("beautyLuxe", data?.data?.token);
-              setLoading(false);
-            }
-          });
+        fetchJWT({ email: currentUser?.email }).then((res) => {
+          localStorage.setItem("beautyLuxe", res?.data?.token);
+          setLoading(false);
+        });
       } else {
         localStorage.removeItem("beautyLuxe");
         setLoading(false);

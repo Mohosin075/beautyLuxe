@@ -1,8 +1,8 @@
 import { MdKeyboardTab } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
 import { toast } from "sonner";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
+import { useCreateUserMutation } from "../redux/api/baseApi";
 
 function SocialLogin() {
   const { googleLogin } = useAuth();
@@ -12,46 +12,37 @@ function SocialLogin() {
 
   const path = location?.state?.from?.pathname || "/";
 
+  const [createUser] = useCreateUserMutation();
   const handleGoogleLogin = () => {
-    googleLogin()
-      .then(async (result) => {
-        console.log(result.user);
+    try {
+      googleLogin()
+        .then(async (result) => {
+          const user = result.user;
 
-        const user = result.user;
+          const userData = {
+            name: user.displayName,
+            email: user.email,
+            photoURL: "",
+            role: "buyer",
+            status: "approved",
+            wishlist: [],
+          };
 
-        const userData = {
-          name: user.displayName,
-          email: user.email,
-          photoURL: "",
-          role: "buyer",
-          status: "approved",
-          wishlist: [],
-        };
-
-        if (result.user) {
-          await axios
-            .post(
-              `https://beauty-luxe-server.vercel.app/user/${result.user.email}`,
-              {
-                userData,
-              }
-            )
-            .then((res) => {
-              if (
-                res.data.insertedId ||
-                res.data.message === "This user Already exist!"
-              ) {
-                toast.success("User Login Successfully!");
-                navigate(path);
-              }
+          if (result.user) {
+            await createUser({
+              email: result.user.email,
+              body: userData,
             });
-        }
-      })
-      .catch((err) => {
-        toast.error(err.message);
-
-        console.log(err);
-      });
+            toast.success("User Login Successfully!");
+            navigate(path);
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -59,7 +50,7 @@ function SocialLogin() {
       <button
         onClick={handleGoogleLogin}
         type="submit"
-        className="my-btn w-full text-center border-secondary-dark bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+        className="my-btn w-full"
       >
         Continue with Google
         <span>
@@ -71,7 +62,7 @@ function SocialLogin() {
           toast.info("This feature is't available right now! try with Google.")
         }
         type="submit"
-        className="my-btn w-full text-center bg-secondary-dark text-white hover:bg-purple-300 hover:text-purple-900"
+        className="my-btn w-full"
       >
         Continue with Facebook
         <span>
