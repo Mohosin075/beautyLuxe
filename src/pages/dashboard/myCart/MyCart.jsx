@@ -79,8 +79,8 @@ function MyCart() {
     >
       <SectionTitle title={"My Carts"} />
 
-      {carts?.items?.length === 0 ? (
-        <div className="text-center ">Your cart is empty!</div>
+      {!carts || carts?.items?.length === 0 ? (
+        <div className="text-center min-h-screen text-3xl">Your cart is empty!</div>
       ) : (
         <div>
           <div className="mt-4 flex justify-between items-center">
