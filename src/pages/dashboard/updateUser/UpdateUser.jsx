@@ -10,6 +10,7 @@ import {
   useGetUserQuery,
   useUpdateUserMutation,
 } from "../../../redux/api/baseApi";
+import useTheme from "../../../hooks/useTheme";
 
 function UpdateUser() {
   const { email } = useParams();
@@ -18,6 +19,7 @@ function UpdateUser() {
   const { data: singleUser, isLoading } = useGetUserQuery({ email });
   const { refetch } = useGetAllUserQuery();
   const [updateUser] = useUpdateUserMutation({});
+  const { theme } = useTheme();
 
   const { register, handleSubmit } = useForm();
 
@@ -45,8 +47,8 @@ function UpdateUser() {
   }
 
   return (
-    <div className="flex bg-background justify-around  min-h-screen py-8">
-      <div className="p-10 rounded-md w-9/12">
+    <div className={`flex  justify-around  min-h-screen py-8`}>
+      <div className="px-4 md:p-10 rounded-md md:w-9/12 border">
         <div>
           <SectionTitle
             title={"Update User"}
@@ -69,7 +71,9 @@ function UpdateUser() {
                   <select
                     {...register("role")}
                     defaultValue={singleUser?.role}
-                    className="input-style"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   >
                     <option value={"buyer"}>buyer</option>
                     <option value={"seller"}>seller</option>
@@ -81,7 +85,9 @@ function UpdateUser() {
                   <select
                     {...register("status")}
                     defaultValue={singleUser?.status}
-                    className="input-style"
+                    className={`input-style ${
+                      theme === "dark" ? "bg-textDark" : "bg-lightBackground"
+                    }`}
                   >
                     <option value={"pending"}>pending</option>
                     <option value={"approved"}>approved</option>
