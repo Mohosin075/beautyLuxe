@@ -63,7 +63,7 @@ function AddProduct() {
           : "bg-background text-textDark"
       }`}
     >
-      <div className="p-10 rounded-md  w-9/12">
+      <div className=" px-4 md:p-10 rounded-md  md:w-9/12">
         <div>
           <SectionTitle
             title={"Add Product"}

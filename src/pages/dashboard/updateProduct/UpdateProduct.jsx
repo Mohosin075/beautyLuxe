@@ -8,17 +8,21 @@ import { toast } from "sonner";
 import Loading from "../../loading/Loading";
 import useTheme from "../../../hooks/useTheme";
 import {
+  useGetMyProductQuery,
   useGetSingleProductQuery,
   useUpdateMyProductMutation,
 } from "../../../redux/api/baseApi";
+import useAuth from "../../../hooks/useAuth";
 
 function UpdateProduct() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { user } = useAuth();
   const { data: singleProduct, isLoading } = useGetSingleProductQuery({
     productId,
   });
+  const { refetch } = useGetMyProductQuery({ email: user?.email });
   const { register, handleSubmit, setValue } = useForm();
 
   const [updateMyProduct] = useUpdateMyProductMutation();
@@ -48,6 +52,7 @@ function UpdateProduct() {
         try {
           await updateMyProduct({ productId, body: { ...data } });
           toast.success("update successfully!");
+          refetch()
           navigate("/dashboard/my-product");
         } catch (error) {
           console.log(error);
