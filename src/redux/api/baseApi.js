@@ -96,6 +96,14 @@ export const baseApi = createApi({
         };
       },
     }),
+    deleteUser: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `/user/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
     updateMyProduct: builder.mutation({
       query: ({ body, productId }) => {
         console.log(body);
@@ -110,6 +118,16 @@ export const baseApi = createApi({
       query: (body) => {
         return {
           url: `/card`,
+          method: "PATCH",
+          body: body,
+        };
+      },
+    }),
+    updateUser: builder.mutation({
+      query: ({ body, id }) => {
+        console.log(body, id);
+        return {
+          url: `/user/${id}`,
           method: "PATCH",
           body: body,
         };
@@ -188,4 +206,6 @@ export const {
   useCreateUserMutation,
   useGetAllUserQuery,
   useAddProductMutation,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
 } = baseApi;

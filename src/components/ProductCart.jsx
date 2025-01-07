@@ -64,7 +64,7 @@ function ProductCart({ product, isSeller, wishlist }) {
         userEmail: userFromDb?.email,
         productId: product?._id,
       });
-      refetch();
+      wishlistRefetch();
       navigate("/wishlist");
       Swal.fire({
         position: "top-end",
