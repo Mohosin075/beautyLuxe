@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdKeyboardTab } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
@@ -7,33 +5,19 @@ import SectionTitle from "../../../components/SectionTitle";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import Loading from "../../loading/Loading";
+import {
+  useGetAllUserQuery,
+  useGetUserQuery,
+  useUpdateUserMutation,
+} from "../../../redux/api/baseApi";
 
 function UpdateUser() {
-  const [loading, setLoading] = useState(false);
-  const [singleUser, setSingleUser] = useState(null);
   const { email } = useParams();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("beautyLuxe");
-  useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
-      axios
-        .get(`https://beauty-luxe-server.vercel.app/user/${email}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res) {
-            setLoading(false);
-            setSingleUser(res.data);
-          }
-        });
-    };
-
-    if (token) {
-      fetchUser();
-    }
-  }, [email, token]);
+  const { data: singleUser, isLoading } = useGetUserQuery({ email });
+  const { refetch } = useGetAllUserQuery();
+  const [updateUser] = useUpdateUserMutation({});
 
   const { register, handleSubmit } = useForm();
 
@@ -48,31 +32,21 @@ function UpdateUser() {
       confirmButtonText: "Yes, Update!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await axios
-          .patch(
-            `https://beauty-luxe-server.vercel.app/user/${singleUser?._id}`,
-            data,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-            if (res) {
-              toast.success("updated successfully!");
-              navigate("/dashboard/users");
-            }
-          });
+        await updateUser({ id: singleUser?._id, body: data });
+        refetch();
+        toast.success("updated successfully!");
+        navigate("/dashboard/users");
       }
     });
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
   return (
-    <div className="flex justify-around  gap-7 bg-primary-light min-h-screen py-8">
-      <div className="p-10 rounded-md bg-primary-light w-9/12">
+    <div className="flex bg-background justify-around  min-h-screen py-8">
+      <div className="p-10 rounded-md w-9/12">
         <div>
           <SectionTitle
             title={"Update User"}
@@ -91,11 +65,11 @@ function UpdateUser() {
               </div>
               <div className="flex justify-between gap-6">
                 <div className="text-start space-y-1 w-full">
-                  <label>Role : </label>
+                  <label>Update Role </label>
                   <select
                     {...register("role")}
                     defaultValue={singleUser?.role}
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className="input-style"
                   >
                     <option value={"buyer"}>buyer</option>
                     <option value={"seller"}>seller</option>
@@ -103,11 +77,11 @@ function UpdateUser() {
                   </select>
                 </div>
                 <div className="text-start space-y-1 w-full">
-                  <label>Status : </label>
+                  <label>Update Status </label>
                   <select
                     {...register("status")}
                     defaultValue={singleUser?.status}
-                    className="px-2 py-1 w-full border-b-4 outline-none border-t border-l border-r rounded-md border-primary-dark text-lg bg-purple-200"
+                    className="input-style"
                   >
                     <option value={"pending"}>pending</option>
                     <option value={"approved"}>approved</option>
@@ -116,10 +90,7 @@ function UpdateUser() {
                 </div>
               </div>
               <div>
-                <button
-                  type="submit"
-                  className="my-btn mt-8  text-center bg-primary-dark text-white hover:bg-purple-300 hover:text-purple-900"
-                >
+                <button type="submit" className="my-btn mt-8  ">
                   Update
                   <span>
                     <MdKeyboardTab />

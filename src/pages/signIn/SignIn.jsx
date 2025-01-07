@@ -13,13 +13,12 @@ function SignIn() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { refetch } = useUserFromDB();
-
   const { user } = useAuth();
+  const { refetch } = useUserFromDB({ email: user?.email });
 
-  useEffect(() => {
-    refetch();
-  }, [user, refetch]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [user, refetch]);
 
   const path = location?.state?.from?.pathname || "/";
 
@@ -33,6 +32,7 @@ function SignIn() {
     loginUser(data.email, data.password)
       .then((result) => {
         if (result.user) {
+          refetch()
           toast.success("User Login Successfully!");
           navigate(path);
         }

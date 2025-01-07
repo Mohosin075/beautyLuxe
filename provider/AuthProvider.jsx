@@ -9,7 +9,6 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { app } from "../src/firebase/firebase.config";
-import { useDispatch } from "react-redux";
 import { useJWTMutation } from "../src/redux/api/baseApi";
 
 export const AuthContext = createContext(null);
@@ -17,7 +16,7 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 function AuthProvider({ children }) {
-  const [fetchJWT, { data, isLoading, error }] = useJWTMutation();
+  const [fetchJWT] = useJWTMutation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,13 +39,14 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    setLoading(true)
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       console.log({ currentUser });
       // setLoading(false)
 
       if (currentUser && currentUser?.email) {
-        fetchJWT({ email: currentUser?.email }).then((res) => {
+        await fetchJWT({ email: currentUser?.email }).then((res) => {
           localStorage.setItem("beautyLuxe", res?.data?.token);
           setLoading(false);
         });
