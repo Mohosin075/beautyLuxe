@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const token = localStorage.getItem("beautyLuxe");
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://beauty-luxe-server.vercel.app",
   prepareHeaders: (headers) => {
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);

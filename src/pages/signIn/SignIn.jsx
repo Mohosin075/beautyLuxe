@@ -6,15 +6,14 @@ import useAuth from "../../hooks/useAuth";
 import SocialLogin from "../../components/SocialLogin";
 import useTheme from "../../hooks/useTheme";
 import useUserFromDB from "../../hooks/useUserFromDB";
-import { useEffect } from "react";
+import Loading from "../loading/Loading";
 
 function SignIn() {
   const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user } = useAuth();
-  const { refetch } = useUserFromDB({ email: user?.email });
+ const { refetch } = useUserFromDB();
 
   // useEffect(() => {
   //   refetch();
@@ -32,7 +31,7 @@ function SignIn() {
     loginUser(data.email, data.password)
       .then((result) => {
         if (result.user) {
-          refetch()
+          refetch();
           toast.success("User Login Successfully!");
           navigate(path);
         }
@@ -42,6 +41,7 @@ function SignIn() {
       });
   };
   const { theme } = useTheme();
+
   return (
     <div
       className={`${
